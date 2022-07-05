@@ -1,0 +1,35 @@
+.ticImg{
+    animation: ticImg 15s linear 0s infinite;
+    margin-top: 0px;
+    padding-bottom: 3em;
+    border-radius: 20%;
+ }
+ @keyframes ticImg{
+     0%{
+         transform: rotate(360deg);
+     }
+ }
+ .gen_fl{
+     /* background-image: linear-gradient(#AA292B, #D48843); */
+     animation: gen_fl 5s linear 0s infinite;
+ }
+ @keyframes gen_fl {
+     0%{
+         background-image: linear-gradient(#AA292B,#7e6c36);
+     }
+     20%{
+         background-image: linear-gradient(#AA292B, #D48843);
+     }
+     40%{
+         background-image: linear-gradient(#AA292B, #D48843, #3f1d1d);
+     }
+     60%{
+         background-image: linear-gradient(#AA292B, #D48843, #3f1d1d, #4F311E);
+     }
+     80%{
+         background-image: linear-gradient(#AA292B, #D48843, #3f1d1d, #685622);
+     }
+     100%{
+         background-image: linear-gradient(#AA292B, #D48843, #ae8fb6);
+     }
+ }

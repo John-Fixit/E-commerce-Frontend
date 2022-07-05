@@ -1,0 +1,18 @@
+                /*----------------- Home--------------------- */
+.cont_fluid{
+    margin-top: 10vh !important;
+}
+.sub_carousel{
+    width: 30vh !important;
+}
+.products_row{
+    padding: 3vh 7vh !important;
+}
+@media screen and (max-width: 890px) and (min-width: 50px) {
+    .carousel_img{
+        height: 40vh !important;
+    }
+    .products_row{
+        padding: 3vh 0vh !important;
+    }
+}
