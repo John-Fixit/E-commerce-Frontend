@@ -1,96 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { FaHome, FaRegUser } from 'react-icons/fa'
-import { FaFacebookMessenger } from 'react-icons/fa'
-import { FaRegPlusSquare } from 'react-icons/fa'
-import { FaCompass } from 'react-icons/fa'
-import { FaRegHeart } from 'react-icons/fa'
-import { FaRegBookmark } from 'react-icons/fa'
-import { BiCertification } from "react-icons/bi";
-import { MdAutorenew } from "react-icons/md";
-import style from './style.css'
-import userProfile from '../Images/user.PNG'
-import { useNavigate } from 'react-router-dom'
 function Navbar() {
-    const navigate = useNavigate()
-    const [profilePicture, setprofilePicture] = useState('')
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-    useEffect(() => {
-        setprofilePicture(userDetails.profilePicture)
-    }, [])
-    const logOut = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('userDetails')
-        navigate('/signin')
-    }
     return (
         <>
-            <div className='container-fluid border doc_body fixed-top' style={{ backgroundColor: 'white' }}>
-                <div className='container'>
-                    <div className='d-flex justify-content-space-evenly text-center gen_nav'>
-                        <div className='col-md-4 col-sm-6'>
-                            {/* <Link to='/home' ><img src={userProfile} className='mt-2 card-img-top w-25' /></Link> */}
-                        </div>
-                        <div className='col-md-4 search col-sm-d-none'>
-                            <input type='search' placeholder='search' className='form-control bg-light' />
-                        </div>
-                        <div className='col-md-4 col-sm-6 '>
-                            <div className='d-flex justify-content-space-evenly pages_icons ps-5 mt-2'>
-                                <div className='col-2'>
-                                    <Link to='/homepage' id='nav_bar' ><FaHome size='3.5vh' className='text-dark' /></Link>
-                                </div>
-                                <div className='col-2'>
-                                    <Link to='/message' id='nav_bar' ><FaFacebookMessenger className='text-dark' size='3.5vh' /></Link>
-                                </div>
-                                <div className='col-2'>
-                                    <Link to='/post' id='nav_bar' ><FaRegPlusSquare className='text-dark' size='3.5vh' /></Link>
-                                    {/* <button type="button" class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <FaRegPlusSquare className='text-dark' size='3.5vh' />
-                                    </button>
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    ...
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
-                                </div>
-                                <div className='col-2'>
-                                    <Link to='/explore' id='nav_bar' ><FaCompass size='3.5vh' className='text-dark' /></Link>
-                                </div>
-                                <div className='col-2'>
-                                    <Link to='/follow' id='nav_bar' ><FaRegHeart size='3.5vh' className='text-dark' /></Link>
-                                </div>
-                                <div className='col-2'>
-                                    <div className="btn-group">
-                                        <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src={profilePicture} className='card-img-top rounded-circle' style={{ width: '5vh', height: '5vh' }} />
-                                        </button>
-                                        <ul className="dropdown-menu">
-                                            <li><Link to="/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
-                                            <li><Link to="" className="dropdown-item"><FaRegBookmark /> Saved</Link></li>
-                                            <li><Link to="" className="dropdown-item"><BiCertification /> Settings</Link></li>
-                                            <li><Link to="" className="dropdown-item"><MdAutorenew /> Switch account</Link></li>
-                                            <li><hr className="dropdown-divider" /></li>
-                                            <li><button className="btn dropdown-item" onClick={logOut}>Log out</button></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light px-5">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Navbar</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <Link to='/homepage/home' class="nav-link active">Home</Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link to='' class="nav-link active">About us</Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link to='' class="nav-link active">Products</Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link to='' class="nav-link active">Help</Link>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Contact
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><hr class="dropdown-divider" />
+                                        <button className='dropdown-ite w-100 py-2 btn btn-danger'>Log out</button>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="d-flex">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
                     </div>
                 </div>
-            </div>
+            </nav>
         </>
     )
 }

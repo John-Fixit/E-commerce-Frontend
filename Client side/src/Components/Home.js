@@ -7,6 +7,8 @@ import img1 from '../Images/bgImg1.jpg'
 import img2 from '../Images/bgImg2.jpg'
 import img3 from '../Images/bgImg3.jpg'
 import { FaCartPlus } from 'react-icons/fa'
+// import Footage from './Footage'
+
 function Home() {
   // useEffect(()=>{
   //   getHome()
@@ -117,60 +119,61 @@ function Home() {
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-      </div>
-      <div className='container-fluid'>
-        <div className='col-12 products_row'>
-          <div className='row'>
-            <div className='col-lg-3 col-md-6'>
-              <div class="card h-100 rounded-3">
-                <img src={img2} class="card-img-top" alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">name of the product</h5>
-                  <p class="card-text">₦ (Price) <span >per product</span></p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
-                </div>
-              </div>
-            </div>
-            <div className='col-lg-3 col-md-6'>
-              <div class="card h-100 rounded-3">
-                <img src={img2} class="card-img-top" alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">name of the product</h5>
-                  <p class="card-text">₦ (Price) <span >per product</span></p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+        <div className='container-fluid'>
+          <div className='col-12 products_row'>
+            <div className='row'>
+              <div className='col-lg-3 col-md-6'>
+                <div class="card h-100 rounded-3">
+                  <img src={img2} class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h5 class="card-title">name of the product</h5>
+                    <p class="card-text">₦ (Price) <span >per product</span></p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='col-lg-3 col-md-6'>
-              <div class="card h-100 rounded-3">
-                <img src={img2} class="card-img-top" alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">name of the product</h5>
-                  <p class="card-text">₦ (Price) <span >per product</span></p>
-                </div>
-                <div class="card-footer">
-                  <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+              <div className='col-lg-3 col-md-6'>
+                <div class="card h-100 rounded-3">
+                  <img src={img1} class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h5 class="card-title">name of the product</h5>
+                    <p class="card-text">₦ (Price) <span >per product</span></p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className='col-lg-3 col-md-6'>
-              <div class="card h-100 rounded-3">
-                <img src={img2} class="card-img-top" alt="..." />
-                <div class="card-body">
-                  <h5 class="card-title">name of the product</h5>
-                  <p class="card-text">₦ (Price) <span >per product</span></p>
+              <div className='col-lg-3 col-md-6'>
+                <div class="card h-100 rounded-3">
+                  <img src={img2} class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h5 class="card-title">name of the product</h5>
+                    <p class="card-text">₦ (Price) <span >per product</span></p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+                  </div>
                 </div>
-                <div class="card-footer">
-                  <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+              </div>
+              <div className='col-lg-3 col-md-6'>
+                <div class="card h-100 rounded-3">
+                  <img src={img3} class="card-img-top" alt="..." />
+                  <div class="card-body">
+                    <h5 class="card-title">name of the product</h5>
+                    <p class="card-text">₦ (Price) <span >per product</span></p>
+                  </div>
+                  <div class="card-footer">
+                    <small class="text-muted"><button className='btn btn-primary w-100'>Add Cart <FaCartPlus size='3vh' className='float-end' /></button></small>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        {/* <Footage /> */}
       </div>
     </>
   )
