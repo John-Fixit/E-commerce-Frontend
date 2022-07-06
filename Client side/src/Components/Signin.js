@@ -18,17 +18,19 @@ function Signin() {
         onSubmit: (values) => {
             const authDetails = values;
             axios.post(SIGNINURI, authDetails).then((res) => {
+                let feedBack = res.data
                 console.log(res);
-                localStorage.token = res.data.token
-                // let feedBack = res.data
-                // console.log(res);
                 // setmessage(feedBack.message)
-                // setstatus(feedBack.status)
-                // settoken(feedBack.token)
-                // if (feedBack.token) {
-                //     localStorage.token = JSON.stringify(feedBack.token) 
-                //     navigate('/home')
-                // }
+                setstatus(feedBack.status)
+                settoken(() => { return feedBack.token })
+                if (feedBack.status) {
+                    console.log(`true`);
+                    localStorage.token = JSON.stringify(feedBack.token)
+                    navigate('/homepage')
+                }
+                else {
+                    setmessage(feedBack.message)
+                }
             })
         },
         validationSchema: yup.object({
@@ -43,9 +45,8 @@ function Signin() {
                     <div className='form shadow'>
                         <h1 className='card-header text-center text-muted border-bottom-0'>Sign in</h1>
                         <div className='p-3'>
-                         
-                            <form action='' onSubmit={formik.handleSubmit}>
 
+                            <form action='' onSubmit={formik.handleSubmit}>
                                 <div className='row'>
                                     <div className='form-floating mt-2 col-md-12'>
                                         <div className='form-floating'>
@@ -54,9 +55,7 @@ function Signin() {
                                             {formik.touched.email ? <small className='text-danger'>{formik.errors.email}</small> : ''}
                                         </div>
                                     </div>
-
                                 </div>
-
                                 <div className='mt-2 col-md-12'>
                                     <div className='form-floating'>
 
@@ -64,6 +63,11 @@ function Signin() {
                                         <label for='' className='text-muted ms-2'>Password</label>
                                         {formik.touched.password ? <small className='text-danger'>{formik.errors.password}</small> : ''}
                                     </div>
+                                </div>
+                                <div className='text-center mt-2'>
+                                    {
+                                        !status ? <small className='text-danger text-center fs-4'>{message}</small> : ''
+                                    }
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btn-danger' type='submit'>Create account</button>

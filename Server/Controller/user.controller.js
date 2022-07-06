@@ -37,7 +37,7 @@ const signin=(req, res)=>{
         else{
             if(!user){
                 console.log(`no account of this details is with us`);
-                res.send({message: `no account of this details is with us`, status: false})
+                res.send({message: `No account of this details is with us`, status: false})
             }
             else{
                user.validatePassword(password, (err, same)=>{
@@ -46,8 +46,8 @@ const signin=(req, res)=>{
                 }    
                 else{
                     if(same){
-                        const token = jwt.sign({email}, SECRET, {expiresIn:10})
-                        res.send({message: 'athenticated', status: true, token})
+                        const token = jwt.sign({email}, SECRET, {expiresIn: '6h'})
+                        res.send({message: 'authenticated successfull', status: true, token})
                     }
                     else{
                         res.send({message: 'incorrect password', status: false})
@@ -60,18 +60,16 @@ const signin=(req, res)=>{
 }
 const home=(req, res)=>{
     const token = req.headers.authorization.split(' ')[1]
-    console.log(token);
-    jwt.verify(token, SECRET, (err, result)=>{
+    jwt.verify(token, SECRET, (err, result) =>{
         if(err){
-            console.log(`unauthorized`);
-        }
-        else{
+            res.send({message: `user is unathorized`, status: false})
+        }else{
             userModel.findOne({email: result.email}, (err, userDetails)=>{
                 if(err){
-                    console.log(`internal server error`);
-                }else{
-                    console.log(userDetails);
-                    res.send({message: `authorized`, status: true, userDetails})
+                    res.send({message: `Network error, please check your connection`, status: false})
+                }
+                else{
+                    res.send({message: `user authorized`, status: true, userDetails})
                 }
             })
         }
