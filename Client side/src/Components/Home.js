@@ -21,6 +21,9 @@ function Home() {
   const HOMEURI = 'http://localhost:4000/user/home'
   const CARTURI = 'http://localhost:4000/user/cart'
   const [userId, setuserId] = useState('')
+  const [index, setindex] = useState('')
+  const [productVariation, setproductVariation] = useState(1)
+  const [isLoading, setisLoading] = useState(true)
   const getHome = () => {
     const token = JSON.parse(localStorage.getItem('token'))
     axios.get(HOMEURI, {
@@ -39,6 +42,7 @@ function Home() {
           axios.get('https://fakestoreapi.com/products').then((res) => {
             const responseFromAPI = res.data
             setproducts(() => {
+              setisLoading(false)
               return responseFromAPI
             })
           })
@@ -50,14 +54,40 @@ function Home() {
         }
       })
   }
-  const addToCart=(product)=>{
+  const modalOut = (index) => {
+    setindex(() => { return index })
+    console.log(index);
+  }
+  const addToCart = (product) => {
     console.log(product);
-    axios.post(CARTURI, product).then((res)=>{
+    axios.post(CARTURI, product).then((res) => {
       const responseFromCart = res.data
-      if(responseFromCart.status){
+      setproductVariation(0)
+      if (responseFromCart.status) {
         navigate('/homepage/cart')
       }
     })
+  }
+  const contShopping = (product) => {
+    console.log(product);
+    axios.post(CARTURI, product).then((res) => {
+      const responseFromCart = res.data
+      setproductVariation(0)
+      if (responseFromCart.status) {
+        navigate('/homepage/')
+        window.location.reload()
+      }
+    })
+  }
+  const increament = () => {
+    setproductVariation(() => {
+      return parseInt(productVariation) + 1
+    })
+  }
+  const decreament = () => {
+      setproductVariation(() => {
+          return productVariation + 1
+      })
   }
   return (
     <>
@@ -143,30 +173,67 @@ function Home() {
           </button>
         </div>
         <div className='container-fluid'>
-          <div className='col-12 products_row'>
-            <div className='row'>
-              {
-                products.map((eachProduct, index)=>(
-                <div className='col-lg-3 col-md-6 mt-3' key={index}>
-                  <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
-                    <img src={eachProduct.image} className="card-img-top mx-auto w-50 h-50" alt="..." />
-                    <div className="card-body">
-                      <h6 className="card-title">{eachProduct.title}</h6>
-                      <div className='d-flex justify-content-between'>
-                      <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating.rate}</p>
-                      <p className=''><span className='fw-bold'>COUNT </span>: {eachProduct.rating.count}</p>
+          {
+            isLoading ? <div class="spinner-border text-warning" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div> :
+              <div className='col-12 products_row'>
+                <div className='row'>
+                  {
+                    products.map((eachProduct, index) => (
+                      <div className='col-lg-3 col-md-6 mt-3' key={index}>
+                        <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
+                          <img src={eachProduct.image} className="card-img-top mx-auto w-50 h-50" alt="..." />
+                          <div className="card-body">
+                            <h6 className="card-title">{eachProduct.title}</h6>
+                            <div className='d-flex justify-content-between'>
+                              <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating.rate}</p>
+                              <p className=''><span className='fw-bold'>COUNT </span>: {eachProduct.rating.count}</p>
+                            </div>
+                            <p className="card-text">₦ {Math.round(eachProduct.price * 50)} <span >per product</span></p>
+                          </div>
+                          <div className="card-footer">
+                            <small className="text-muted"><button type="button" class="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut(index)} >
+                              Add To Cart <FaCartPlus size='4vh' className='float-start' />
+                            </button></small>
+                          </div>
+                        </div>
                       </div>
-                      <p className="card-text">₦ {Math.round(eachProduct.price*50)} <span >per product</span></p>
-                    </div>
-                    <div className="card-footer">
-                      <small className="text-muted"><button className='btn btnbg text-light w-100' onClick={()=>addToCart({productImage:eachProduct.image, title:eachProduct.title, price : Math.round(eachProduct.price*50), userId })}>Add To Cart <FaCartPlus size='4vh' className='float-start' /></button></small>
+                    ))
+                  }
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Select Quantity variation</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div className='row justify-content-between'>
+                            <div className='col-sm-6'>
+                              {/* <p className='fw-bold'>{products[index].title}</p>
+                              <p>₦ {Math.round(products[index].price * 50)}</p> */}
+                            </div>
+                            <div className='col-sm-6'>
+                              <div className='row'>
+                                <button className='col-4 btn btnbg text-light fw-bold opacity-75 h-50' onClick={decreament}>-</button>
+                                <p className='col-4 text-center px-auto'>{productVariation}</p>
+                                <button className='col-4 btn btnbg text-light fw-bold h-50' onClick={increament}>+</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer btn-group shadow">
+                          <button type="button" class="btn textColor" onClick={() => contShopping({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>Continue Shopping</button>
+
+                          <button className='btn btnbg text-light' onClick={() => addToCart({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>View Cart and Checkout</button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                ))
-              }
-            </div>
-          </div>
+              </div>
+          }
         </div>
       </div>
     </>

@@ -105,8 +105,9 @@ const cartProduct=(req, res)=>{
     const productImage = req.body.productImage
     const productTitle = req.body.title
     const productPrice = req.body.price
+    const productVariation = req.body.productVariation
     const userId = req.body.userId
-    userModel.findOneAndUpdate({'_id': userId}, {$push: {'cartProduct': {productImage, productPrice, productTitle}}}, (err, updatedVersion)=>{
+    userModel.findOneAndUpdate({'_id': userId}, {$push: {'cartProduct': {productImage, productPrice, productTitle, productVariation}}}, (err, updatedVersion)=>{
         if(err){
             res.send({message: `Internal server error`, status:false})
             console.log(`err dey for here`);
@@ -117,5 +118,28 @@ const cartProduct=(req, res)=>{
         }
     })
 }
+const removeCartItem=(req, res)=>{
+    const userId = req.body.userId;
+    const productImage = req.body.productImage
+    userModel.findOne({'_id': userId}, (err, thisUser)=>{
+        if(err){
+            console.log(`there's error`);
+        }
+        else{
+            let products = thisUser.cartProduct.filter((product)=>(
+                product.productImage != productImage
+            ))  
+            userModel.findOneAndUpdate({'_id': userId}, {'cartProduct': products}), (err, result)=>{
+                if(err){
+                    console.log('error');
+                }
+                // else{
+                //     console.log(result);
+                //     res.send({result, status: true})
+                // }
+            }
+        }
+    })
+}
 
-module.exports = { getLandingPage, signup, signin, home, cartProduct}
+module.exports = { getLandingPage, signup, signin, home, cartProduct, removeCartItem}
