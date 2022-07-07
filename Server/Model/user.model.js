@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     email: String,
     contact: String,
     username: String,
-    password: String
+    password: String,
+    cartProduct: [],
 })
 const saltRound = 10;
 userSchema.pre('save', function(next){

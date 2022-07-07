@@ -9,7 +9,7 @@ function SignUp() {
     const SIGNUPURI = 'http://localhost:4000/user/signup'
     const [status, setstatus] = useState('')
     const [message, setmessage] = useState('')
-    const contactRegex = /^[0][\d]{11}$/
+    const contactRegex = /^[0][\d]{10}$/
     const formik = useFormik({
         initialValues: {
             firstname: '',

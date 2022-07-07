@@ -3,7 +3,7 @@ import { FaFacebook, FaGooglePlus, FaInstagram, FaLinkedin, FaPinterest, FaTwitt
 import { Link } from 'react-router-dom'
 function Footage() {
     return (
-        <footer className="page-footer font-small indigo fixed-bottom">
+        <footer className="page-footer font-small indigo sticky-bottom">
             <div className="container">
                 {/* <div className="row text-center d-flex justify-content-center pt-5 mb-3">
                     <div className="col-md-2 mb-3">

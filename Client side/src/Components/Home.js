@@ -19,6 +19,8 @@ function Home() {
   const navigate = useNavigate()
   const [products, setproducts] = useState([])
   const HOMEURI = 'http://localhost:4000/user/home'
+  const CARTURI = 'http://localhost:4000/user/cart'
+  const [userId, setuserId] = useState('')
   const getHome = () => {
     const token = JSON.parse(localStorage.getItem('token'))
     axios.get(HOMEURI, {
@@ -32,6 +34,7 @@ function Home() {
         if (res.data.status) {
           const responseFromServer = res.data
           const userDetails = responseFromServer.userDetails
+          setuserId(userDetails._id)
           localStorage.setItem('userDetails', JSON.stringify(userDetails))
           axios.get('https://fakestoreapi.com/products').then((res) => {
             const responseFromAPI = res.data
@@ -47,7 +50,15 @@ function Home() {
         }
       })
   }
-  console.log(products);
+  const addToCart=(product)=>{
+    console.log(product);
+    axios.post(CARTURI, product).then((res)=>{
+      const responseFromCart = res.data
+      if(responseFromCart.status){
+        navigate('/homepage/cart')
+      }
+    })
+  }
   return (
     <>
       <div className='container-fluid cont_fluid'>
@@ -145,10 +156,10 @@ function Home() {
                       <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating.rate}</p>
                       <p className=''><span className='fw-bold'>COUNT </span>: {eachProduct.rating.count}</p>
                       </div>
-                      <p className="card-text">₦ {eachProduct.price * 1500} <span >per product</span></p>
+                      <p className="card-text">₦ {Math.round(eachProduct.price*50)} <span >per product</span></p>
                     </div>
                     <div className="card-footer">
-                      <small className="text-muted"><button className='btn btn-primary w-100'>Add To Cart <FaCartPlus size='4vh' className='float-end' /></button></small>
+                      <small className="text-muted"><button className='btn btnbg text-light w-100' onClick={()=>addToCart({productImage:eachProduct.image, title:eachProduct.title, price : Math.round(eachProduct.price*50), userId })}>Add To Cart <FaCartPlus size='4vh' className='float-start' /></button></small>
                     </div>
                   </div>
                 </div>

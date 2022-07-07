@@ -5,5 +5,5 @@ userRouter.get('/', userController.getLandingPage)
 userRouter.post('/signup', userController.signup)
 userRouter.post('/signin', userController.signin)
 userRouter.get('/home', userController.home)
-
+userRouter.post('/cart', userController.cartProduct)
 module.exports = userRouter

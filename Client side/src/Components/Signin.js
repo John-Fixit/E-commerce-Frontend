@@ -26,7 +26,7 @@ function Signin() {
                 if (feedBack.status) {
                     console.log(`true`);
                     localStorage.token = JSON.stringify(feedBack.token)
-                    navigate('/homepage')
+                    navigate('/homepage/')
                 }
                 else {
                     setmessage(feedBack.message)
