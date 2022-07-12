@@ -160,4 +160,10 @@ const removeCartItem = (req, res) => {
     })
 }
 
-module.exports = { getLandingPage, signup, signin, home,getCart, cartProduct, removeCartItem }
+const saveProfile=(req, res)=>{
+    const userDetails = req.body
+    const profilePhoto = userDetails.profilePhoto
+    
+}
+
+module.exports = { getLandingPage, signup, signin, home,getCart, cartProduct, removeCartItem, saveProfile }

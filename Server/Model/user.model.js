@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     contact: String,
     username: String,
     password: String,
+    profilePhoto: String,
     cartProduct: [],
 })
 const saltRound = 10;

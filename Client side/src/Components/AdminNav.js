@@ -23,20 +23,18 @@ function AdminNav() {
                     <li className="nav-item ms-3">
                         <Link to='' className="nav-link active text-light ">Home</Link>
                     </li>
-                    <li className="nav-item ms-3">
+                    {/* <li className="nav-item ms-3">
                         <Link to='' className="nav-link active text-light">About us</Link>
-                    </li>
+                    </li> */}
                     {/* <li className="nav-item ms-3">
                         <Link to='' className="nav-link active text-light">Add member</Link>
                     </li> */}
                     <li className="nav-item ms-3">
-                        <Link to='/admin/customers' className="nav-link active text-light">Customeer List</Link>
+                        <Link to='/admin/customers' className="nav-link active text-light">Customer List</Link>
                     </li>
                     <li className="nav-item ms-3">
                         <Link to='/admin/new product' className="nav-link active text-light position-relative"> upload products </Link>
                     </li>
-
-
                 </ul>
                 <form className='ms-4 d-flex'>
                     <input type='text' className='form-control w-100' placeholder='Search product' />

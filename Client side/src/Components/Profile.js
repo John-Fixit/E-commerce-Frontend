@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { FaRegHeart, FaRegUser } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
@@ -11,7 +12,9 @@ function Profile() {
     const [gender, setgender] = useState('')
     const [DOB, setDOB] = useState('')
     const [disable, setdisable] = useState(true)
+    const [profilePhoto, setprofilePhoto] = useState('')
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    const SAVEPROFILEURI = 'http://localhost:4000/user/save'
     useEffect(() => {
         setfirstname(userDetails.firstname)
         setlastname(userDetails.lastname)
@@ -21,8 +24,18 @@ function Profile() {
     const editProfile=()=>{
         setdisable(false)
     }
+    const selectPhoto=(e)=>{
+        const selectedPhoto = e.target.files[0]
+        const reader = new FileReader()
+        reader.readAsDataURL(selectedPhoto)
+        reader.onload=()=>{
+            setprofilePhoto(()=>{return reader.result})
+        }
+    }
     const saveProfile=()=>{
-        console.log(`ready to edit profile`);
+        const userDetails = {firstname, lastname, email, contact, profilePhoto, profilePhoto}
+        axios.post(SAVEPROFILEURI, userDetails)
+        console.log(`responding`);
     }
     return (
         <>
@@ -71,6 +84,12 @@ function Profile() {
                                     <div className='col-6 form-floating'>
                                         <input type='date' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} />
                                         <label htmlFor='' >Birthdate(optional)</label>
+                                    </div>
+                                </div>
+                                <div className='row mt-3'>
+                                    <div className='col-6 form-floating'>
+                                        <input type='file' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Upload' onChange={(e)=>selectPhoto(e)}/>
+                                        <label htmlFor='' >Upload profile photo(optional)</label>
                                     </div>
                                 </div>
                                 <div className='row shadow mt-4 btn-group pb-3'>
