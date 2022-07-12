@@ -45,6 +45,7 @@ function Home() {
               setisLoading(false)
               return responseFromAPI
             })
+            console.log(products);
           })
         }
         else {
@@ -55,11 +56,10 @@ function Home() {
       })
   }
   const modalOut = (index) => {
-    setindex(() => { return index })
-    console.log(index);
+    setindex(index)
   }
   const addToCart = (product) => {
-    console.log(product);
+    console.log(index);
     axios.post(CARTURI, product).then((res) => {
       const responseFromCart = res.data
       setproductVariation(0)
@@ -86,7 +86,7 @@ function Home() {
   }
   const decreament = () => {
       setproductVariation(() => {
-          return productVariation + 1
+          return productVariation - 1
       })
   }
   return (
@@ -172,7 +172,7 @@ function Home() {
             <span className="visually-hidden">Next</span>
           </button>
         </div>
-        <div className='container-fluid'>
+        <div className='container-fluid text-center'>
           {
             isLoading ? <div class="spinner-border text-warning" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -190,7 +190,7 @@ function Home() {
                               <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating.rate}</p>
                               <p className=''><span className='fw-bold'>COUNT </span>: {eachProduct.rating.count}</p>
                             </div>
-                            <p className="card-text">₦ {Math.round(eachProduct.price * 50)} <span >per product</span></p>
+                            <p className="card-text text-start">Price : ₦{Math.round(eachProduct.price * 50)} <span >per product</span></p>
                           </div>
                           <div className="card-footer">
                             <small className="text-muted"><button type="button" class="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut(index)} >

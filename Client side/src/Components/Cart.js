@@ -1,21 +1,26 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { FaDailymotion, FaTrash } from 'react-icons/fa'
+import { FaDailymotion, FaTrash } from 'react-icons/fa' 
 import img from '../Images/bgImg2.jpg'
 import style from './style.css'
+import { useNavigate } from 'react-router-dom'
 function Cart() {
+    const navigate = useNavigate()
     useEffect(() => {
         getCart()
     }, [])
     const REMOVEURI = 'http://localhost:4000/user/removeCartItem'
+    const CARTURI = 'http://localhost:4000/user/carts'
     const [product, setproduct] = useState([])
     const [checkOutAmount, setcheckOutAmount] = useState('')
     const [productVariation, setproductVariation] = useState(1)
-    const [userId, setuserId] = useState('')
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    const userId = userDetails._id
     const getCart = () => {
-        const userDetails = JSON.parse(localStorage.getItem('userDetails'))
-        setuserId(() => { return userDetails._id })
-        setproduct(() => { return userDetails.cartProduct })
+        axios.post(CARTURI, {userId}).then((res)=>{
+            setproduct(() => { return res.data.products })
+            setcheckOutAmount(()=>{return res.data.totalPrice}) 
+        })
     }
     const increament = (index) => {
         // let kk = product[index].productVariation +1;
@@ -28,13 +33,14 @@ function Cart() {
         //   })
     }
     const removeItem = ({productImage}) => {
+        console.log(userId);
         axios.post(REMOVEURI, {userId, productImage}).then((res)=>{
-            console.log(res);
+            window.location.reload()
         })
     }
     return (
         <>
-            <div className='container-fluid cont_fluid bg-light padding_nav py-3'>
+            <div className='container-fluid cont_fluid bg-light padding_nav bg-white py-3'>
                 <div className='row'>
                     <div className='col-sm-9'>
                         <div className='card h-100 shadow py-2 border-0 pt-4 px-2'>
@@ -56,11 +62,11 @@ function Cart() {
                                         </div>
                                         <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
                                             <button className='textColor border-0 py-2 px-4 rounded-3' onClick={()=>removeItem({productImage: eachProduct.productImage})}><FaTrash /> Remove</button>
-                                            {/* <div className='row'>
+                                            <div className='row'>
                                                 <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button>
                                                 <p className='col-4'>{eachProduct.productVariation}</p>
                                                 <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button>
-                                            </div> */}
+                                            </div>
                                         </div>
                                         <hr />
                                     </div>
@@ -73,9 +79,9 @@ function Cart() {
                             <h5 className='card-header ps-2 bg-white'>Cart Summary</h5>
                             <div className='card-body px-2 py-0 pt-2 border-bottom d-flex justify-content-between'>
                                 <p>Sub-Total</p>
-                                <h5>₦ total amount sum</h5>
+                                <h5>₦ {checkOutAmount}</h5>
                             </div>
-                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' >CHECKOUT (Total amount)</button>
+                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' >CHECKOUT ({checkOutAmount})</button>
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ function Profile() {
     const [contact, setcontact] = useState('')
     const [gender, setgender] = useState('')
     const [DOB, setDOB] = useState('')
+    const [disable, setdisable] = useState(true)
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
     useEffect(() => {
         setfirstname(userDetails.firstname)
@@ -17,6 +18,12 @@ function Profile() {
         setemail(userDetails.email)
         setcontact(userDetails.contact)
     }, [])
+    const editProfile=()=>{
+        setdisable(false)
+    }
+    const saveProfile=()=>{
+        console.log(`ready to edit profile`);
+    }
     return (
         <>
             <div className='container-fluid cont_fluid bg-light pt-2'>
@@ -34,27 +41,27 @@ function Profile() {
                                 <h4 className='card-header'>Details</h4>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' placeholder='Firstname' value={firstname} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Firstname' value={firstname} />
                                         <label htmlFor='' >Firstname</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' placeholder='Lastname' value={lastname} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Lastname' value={lastname} />
                                         <label htmlFor='' >Lastname</label>
                                     </div>
                                 </div>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <input type='email' className='form-control border-0 border-bottom border-dark' placeholder='email' value={email} />
+                                        <input type='email' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='email' value={email} />
                                         <label htmlFor='' >Email Address</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' placeholder='phone' value={contact} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} />
                                         <label htmlFor='' >Phone Number(optional)</label>
                                     </div>
                                 </div>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <select className='form-control border-0 border-bottom border-dark'>
+                                        <select className='form-control border-0 border-bottom border-dark' disabled={disable}>
                                             <option >Please select</option>
                                             <option >Male</option>
                                             <option >Female</option>
@@ -62,16 +69,16 @@ function Profile() {
                                         <label htmlFor='' >Gender(optional)</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='date' className='form-control border-0 border-bottom border-dark' placeholder='phone' value={contact} />
+                                        <input type='date' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} />
                                         <label htmlFor='' >Birthdate(optional)</label>
                                     </div>
                                 </div>
                                 <div className='row shadow mt-4 btn-group pb-3'>
                                     <div className='col-6'>
-                                        <button className='btn btn-success w-100'>EDIT</button>
+                                        <button className='btn btn-success w-100' onClick={editProfile}>EDIT</button>
                                     </div>
                                     <div className='col-6 bgs rounded'>
-                                        <button className='border-0 pt-2 w-100 bgs text-light'>SAVE</button>
+                                        <button className='border-0 pt-2 w-100 bgs text-light' disabled={disable} onClick={saveProfile}>SAVE</button>
                                     </div>
                                 </div>
                             </div>
