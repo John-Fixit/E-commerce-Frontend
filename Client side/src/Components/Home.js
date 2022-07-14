@@ -24,6 +24,8 @@ function Home() {
   const [index, setindex] = useState('')
   const [productVariation, setproductVariation] = useState(1)
   const [isLoading, setisLoading] = useState(true)
+  const [productTittle, setproductTittle] = useState('')
+  const [productPrice, setproductPrice] = useState('')
   const getHome = () => {
     const token = JSON.parse(localStorage.getItem('token'))
     axios.get(HOMEURI, {
@@ -39,13 +41,13 @@ function Home() {
           const userDetails = responseFromServer.userDetails
           setuserId(userDetails._id)
           localStorage.setItem('userDetails', JSON.stringify(userDetails))
+
           axios.get('https://fakestoreapi.com/products').then((res) => {
             const responseFromAPI = res.data
             setproducts(() => {
               setisLoading(false)
               return responseFromAPI
             })
-            console.log(products);
           })
         }
         else {
@@ -55,8 +57,11 @@ function Home() {
         }
       })
   }
-  const modalOut = (index) => {
-    setindex(index)
+  const modalOut = (productDetail) => {
+    console.log(productDetail);
+    setindex(()=>{return productDetail.index})
+    setproductTittle(()=>{return productDetail.titleOfProduct})
+    setproductPrice(()=>{return productDetail.priceOfProduct})
   }
   const addToCart = (product) => {
     console.log(index);
@@ -174,8 +179,8 @@ function Home() {
         </div>
         <div className='container-fluid text-center'>
           {
-            isLoading ? <div class="spinner-border text-warning" role="status">
-              <span class="visually-hidden">Loading...</span>
+            isLoading ? <div className="spinner-border text-warning" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div> :
               <div className='col-12 products_row'>
                 <div className='row'>
@@ -193,7 +198,7 @@ function Home() {
                             <p className="card-text text-start">Price : ₦{Math.round(eachProduct.price * 50)} <span >per product</span></p>
                           </div>
                           <div className="card-footer">
-                            <small className="text-muted"><button type="button" class="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut(index)} >
+                            <small className="text-muted"><button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({index, titleOfProduct: eachProduct.title, priceOfProduct: Math.round(eachProduct.price * 50)})} >
                               Add To Cart <FaCartPlus size='4vh' className='float-start' />
                             </button></small>
                           </div>
@@ -201,18 +206,18 @@ function Home() {
                       </div>
                     ))
                   }
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Select Quantity variation</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title" id="exampleModalLabel">Select Quantity variation</h5>
+                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                           <div className='row justify-content-between'>
                             <div className='col-sm-6'>
-                              {/* <p className='fw-bold'>{products[index].title}</p>
-                              <p>₦ {Math.round(products[index].price * 50)}</p> */}
+                              <p className='fw-bold'>{productTittle}</p>
+                              <p>₦ {productPrice}</p>
                             </div>
                             <div className='col-sm-6'>
                               <div className='row'>
@@ -223,8 +228,8 @@ function Home() {
                             </div>
                           </div>
                         </div>
-                        <div class="modal-footer btn-group shadow">
-                          <button type="button" class="btn textColor" onClick={() => contShopping({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>Continue Shopping</button>
+                        <div className="modal-footer btn-group shadow">
+                          <button type="button" className="btn textColor" onClick={() => contShopping({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>Continue Shopping</button>
 
                           <button className='btn btnbg text-light' onClick={() => addToCart({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>View Cart and Checkout</button>
                         </div>

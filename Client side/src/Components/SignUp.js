@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import axios from'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 function SignUp() {
     const navigate = useNavigate()
     const SIGNUPURI = 'http://localhost:4000/user/signup'
@@ -17,7 +18,10 @@ function SignUp() {
             email: '',
             contact: '',
             username: '',
-            password: ''
+            password: '',
+            profilePhoto: '',
+            gender: '',
+            dateOfBirth: ''
         },
         onSubmit: (values) => {
             const userDetails = values;
@@ -97,6 +101,9 @@ function SignUp() {
                                             {formik.touched.password ? <small className='text-danger'>{ formik.errors.password }</small>: ''}
                                         </div>
                                     </div>
+                                </div>
+                                <div className='col-12 mt-3'>
+                                    <p className='text-muted'>Already have an account <Link to='/signin' className='text-decoration-none'>Sign in</Link></p>
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btn-danger' type='submit'>Create account</button>

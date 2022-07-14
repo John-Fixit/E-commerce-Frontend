@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 function Signin() {
     const navigate = useNavigate()
     const SIGNINURI = 'http://localhost:4000/user/signin'
@@ -24,8 +25,7 @@ function Signin() {
                 setstatus(feedBack.status)
                 settoken(() => { return feedBack.token })
                 if (feedBack.status) {
-                    console.log(`true`);
-                    localStorage.token = JSON.stringify(feedBack.token)
+                    localStorage.setItem('token', JSON.stringify(feedBack.token))
                     navigate('/homepage/')
                 }
                 else {
@@ -68,6 +68,9 @@ function Signin() {
                                     {
                                         !status ? <small className='text-danger text-center fs-4'>{message}</small> : ''
                                     }
+                                </div>
+                                <div className='col-12 mt-3'>
+                                    <p className='text-muted'>Don't have an account <Link to='/signup' className='text-decoration-none'>Sign up</Link></p>
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btn-danger' type='submit'>Create account</button>

@@ -2,25 +2,33 @@
 const { userModel } = require("../Model/user.model")
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
+const cloudinary = require('cloudinary')
 const SECRET = process.env.JWT_SECRET
 const EMAIL = process.env.EMAIL
 const PASSWORD = process.env.PASSWORD
+const CLOUD_NAME = process.env.CLOUD_NAME
+const API_KEY = process.env.API_KEY
+const API_SECRET = process.env.API_SECRET
 const getLandingPage = (req, res) => {
     res.send(`Welcome to e-commerce site`)
 }
-
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET
+});
 
 const signup = (req, res) => {
     const userDetails = req.body
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: "jfixcoding@gmail.com",
-            pass: "<FIXgufaith996.com/>"
-        }
-    });
+    // var transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     auth: {
+    //         user: "jfixcoding@gmail.com",
+    //         pass: "<FIXgufaith996.com/>"
+    //     }
+    // });
     const userEmail = userDetails.email
-    
+
     userModel.findOne({ email: userDetails.email }, (err, user) => {
         if (err) {
             console.log(`error dey`);
@@ -34,21 +42,21 @@ const signup = (req, res) => {
                     if (err) {
                         res.status(501).send({ message: `error occur not registered`, status: false })
                     } else {
-                        var mailMessage = {
-                            from: 'adeoyejohn293@gmail.com',
-                            to: userEmail,
-                            subject: 'Registration successfull!',
-                            text: 'Welcome to JFIX E-commerce site'
-                        }
-                        transport.sendMail(mailMessage, (err, info) => {
-                            if (err) {
-                                console.log(err);
-                            }
-                            else {
-                                console.log(info.response);
-                                res.status(200).send({ message: `Registration successfull`, status: true, })
-                            }
-                        })
+                        // var mailMessage = {
+                        //     from: 'adeoyejohn293@gmail.com',
+                        //     to: userEmail,
+                        //     subject: 'Registration successfull!',
+                        //     text: 'Welcome to JFIX E-commerce site'
+                        // }
+                        // transporter.sendMail(mailMessage, (err, info) => {
+                        //     if (err) {
+                        //         console.log(err);
+                        //     }
+                        // else {
+                        // console.log(info.response);
+                        res.status(200).send({ message: `Registration successfull`, status: true, })
+                        // }
+                        // })
                     }
                 })
             }
@@ -103,18 +111,28 @@ const home = (req, res) => {
         }
     })
 }
-const getCart=(req, res)=>{
+const getUser = (req, res) => {
     const userId = req.body.userId
-    userModel.findOne({"_id": userId}, (err,user)=>{
-        if(err){
+    userModel.findOne({ '_id': userId }, (err, user) => {
+        if (err) {
+            res.send({ message: `User unidentified`, status: false })
+        } else {
+            res.send({ user, status: true })
+        }
+    })
+}
+const getCart = (req, res) => {
+    const userId = req.body.userId
+    userModel.findOne({ "_id": userId }, (err, user) => {
+        if (err) {
             console.log(`Can't find the user`);
-            res.send({message: `internal server error`, status: false})
-        }else{
+            res.send({ message: `internal server error`, status: false })
+        } else {
             let totalPrice = 0;
-            user.cartProduct.map((eachProduct)=>{
+            user.cartProduct.map((eachProduct) => {
                 totalPrice += parseInt(eachProduct.productPrice)
             })
-            res.send({message: `Cart products`, products: user.cartProduct, status: true, totalPrice})
+            res.send({ message: `Cart products`, products: user.cartProduct, status: true, totalPrice })
         }
     })
 }
@@ -130,7 +148,6 @@ const cartProduct = (req, res) => {
             console.log(`err dey for here`);
         }
         else {
-            console.log();
             res.send({ message: `Product added to your cart`, status: true })
         }
     })
@@ -138,20 +155,20 @@ const cartProduct = (req, res) => {
 const removeCartItem = (req, res) => {
     const userId = req.body.userId;
     const productImage = req.body.productImage
-    userModel.findOne({'_id': userId}, (err, result)=>{
-        if(err){
+    userModel.findOne({ '_id': userId }, (err, result) => {
+        if (err) {
             console.log(err);
             console.log(`There's an error`);
-        }else{
+        } else {
             const thisUser = result
-            let found = thisUser.cartProduct.filter(thisOne=>
-                productImage!=thisOne.productImage
+            let found = thisUser.cartProduct.filter(thisOne =>
+                productImage != thisOne.productImage
             )
-            if(found){
-                userModel.findOneAndUpdate({'_id': userId}, {'cartProduct': found}, (err, productRemains)=>{
-                    if(err){
+            if (found) {
+                userModel.findOneAndUpdate({ '_id': userId }, { 'cartProduct': found }, (err, productRemains) => {
+                    if (err) {
                         console.log(`An error occur in the updating of the remaining product`);
-                    }else{
+                    } else {
                         console.log(productRemains);
                     }
                 })
@@ -160,10 +177,28 @@ const removeCartItem = (req, res) => {
     })
 }
 
-const saveProfile=(req, res)=>{
+const saveProfile = (req, res) => {
     const userDetails = req.body
     const profilePhoto = userDetails.profilePhoto
-    
+    const userEmail = req.body.email
+    const firstname = req.body.firstname
+    const lastname = req.body.lastname
+    const contact = req.body.contact
+    cloudinary.v2.uploader.upload(profilePhoto, (err, result) => {
+        if (err) {
+            console.log(`Unable to upload, due to internal server error`);
+        } else {
+            const uploadedPhoto = result.secure_url
+            userModel.findOneAndUpdate({ 'email': userEmail }, { $set: {'profilePhoto': uploadedPhoto,  'firstname': firstname, 'lastname': lastname, 'contact': contact } }, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    console.log(`error dey`);
+                } else {
+                    console.log(result);
+                }
+            })
+        }
+    })
 }
 
-module.exports = { getLandingPage, signup, signin, home,getCart, cartProduct, removeCartItem, saveProfile }
+module.exports = { getLandingPage, signup, signin, home,getUser, getCart, cartProduct, removeCartItem, saveProfile }

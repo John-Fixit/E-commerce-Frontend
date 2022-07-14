@@ -8,10 +8,12 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     profilePhoto: String,
+    gender: String,
+    dateOfBirth: String,
     cartProduct: [],
 })
 const saltRound = 10;
-userSchema.pre('save', function(next){
+userSchema.pre('save', function (next) {
     bcrypt.hash(this.password, saltRound, (err, hashedPassword) => {
         if (err) {
             console.log(err);
@@ -22,11 +24,11 @@ userSchema.pre('save', function(next){
         }
     })
 })
-userSchema.methods.validatePassword = function(password, callback){
-    bcrypt.compare(password, this.password, (err, same)=>{
-        if(!err){
+userSchema.methods.validatePassword = function (password, callback) {
+    bcrypt.compare(password, this.password, (err, same) => {
+        if (!err) {
             callback(err, same)
-        }else{
+        } else {
             next()
         }
     })

@@ -25,7 +25,9 @@ function Cart() {
     const increament = (index) => {
         // let kk = product[index].productVariation +1;
         // console.log(kk);
-        // return product[index].productVariation = kk
+        // setproductVariation(()=>{
+        //  return product[index].productVariation = kk
+        // })
     }
     const decreament = (index) => {
         //   setproductVariation(()=>{
@@ -63,9 +65,9 @@ function Cart() {
                                         <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
                                             <button className='textColor border-0 py-2 px-4 rounded-3' onClick={()=>removeItem({productImage: eachProduct.productImage})}><FaTrash /> Remove</button>
                                             <div className='row'>
-                                                <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button>
-                                                <p className='col-4'>{eachProduct.productVariation}</p>
-                                                <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button>
+                                                {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
+                                                <p className='col-12'>{eachProduct.productVariation} product</p>
+                                                {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button> */}
                                             </div>
                                         </div>
                                         <hr />

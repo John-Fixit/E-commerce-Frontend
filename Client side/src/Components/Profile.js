@@ -9,33 +9,45 @@ function Profile() {
     const [lastname, setlastname] = useState('')
     const [email, setemail] = useState('')
     const [contact, setcontact] = useState('')
+    const [username, setusername] = useState('')
     const [gender, setgender] = useState('')
     const [DOB, setDOB] = useState('')
     const [disable, setdisable] = useState(true)
     const [profilePhoto, setprofilePhoto] = useState('')
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
     const SAVEPROFILEURI = 'http://localhost:4000/user/save'
+    const GETUSERURI = 'http://localhost:4000/user/thisuser'
+    let userId
+    if (localStorage.userDetails) {
+         userId = userDetails._id
+    }
     useEffect(() => {
-        setfirstname(userDetails.firstname)
-        setlastname(userDetails.lastname)
-        setemail(userDetails.email)
-        setcontact(userDetails.contact)
+        getUser()
     }, [])
-    const editProfile=()=>{
+    const getUser = () => {
+        axios.post(GETUSERURI, {userId}).then((res)=>{
+            const thisUser = res.data.user
+            setfirstname(()=>{return thisUser.firstname})
+            setlastname(()=>{return thisUser.lastname})
+            setemail(()=>{return thisUser.email})
+            setcontact(()=>{return thisUser.contact})
+            setusername(()=>{return thisUser.username})
+        })
+    }
+    const editProfile = () => {
         setdisable(false)
     }
-    const selectPhoto=(e)=>{
+    const selectPhoto = (e) => {
         const selectedPhoto = e.target.files[0]
         const reader = new FileReader()
         reader.readAsDataURL(selectedPhoto)
-        reader.onload=()=>{
-            setprofilePhoto(()=>{return reader.result})
+        reader.onload = () => {
+            setprofilePhoto(() => { return reader.result })
         }
     }
-    const saveProfile=()=>{
-        const userDetails = {firstname, lastname, email, contact, profilePhoto, profilePhoto}
+    const saveProfile = () => {
+        const userDetails = { firstname, lastname, email, contact, profilePhoto }
         axios.post(SAVEPROFILEURI, userDetails)
-        console.log(`responding`);
     }
     return (
         <>
@@ -54,21 +66,21 @@ function Profile() {
                                 <h4 className='card-header'>Details</h4>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Firstname' value={firstname} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Firstname' value={firstname} onChange={(e) => setfirstname(e.target.value)} />
                                         <label htmlFor='' >Firstname</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Lastname' value={lastname} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Lastname' value={lastname} onChange={(e) => setlastname(e.target.value)} />
                                         <label htmlFor='' >Lastname</label>
                                     </div>
                                 </div>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <input type='email' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='email' value={email} />
+                                        <input type='email' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='email' value={email} onChange={(e) => setemail(e.target.value)} />
                                         <label htmlFor='' >Email Address</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} />
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} onChange={(e) => setcontact(e.target.value)} />
                                         <label htmlFor='' >Phone Number(optional)</label>
                                     </div>
                                 </div>
@@ -82,13 +94,17 @@ function Profile() {
                                         <label htmlFor='' >Gender(optional)</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='date' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' value={contact} />
+                                        <input type='date' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' />
                                         <label htmlFor='' >Birthdate(optional)</label>
                                     </div>
                                 </div>
                                 <div className='row mt-3'>
+                                <div className='col-6 form-floating'>
+                                        <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} value={username} placeholder='username' onChange={(e) => selectPhoto(e)} />
+                                        <label htmlFor='' >Username(optional)</label>
+                                    </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='file' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Upload' onChange={(e)=>selectPhoto(e)}/>
+                                        <input type='file' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Upload' onChange={(e) => selectPhoto(e)} />
                                         <label htmlFor='' >Upload profile photo(optional)</label>
                                     </div>
                                 </div>
