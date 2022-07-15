@@ -18,8 +18,10 @@ function Home() {
   }, [])
   const navigate = useNavigate()
   const [products, setproducts] = useState([])
+  const [otherProduct, setotherProduct] = useState([])
   const HOMEURI = 'http://localhost:4000/user/home'
   const CARTURI = 'http://localhost:4000/user/cart'
+  const productURI = 'http://localhost:4000/user/products'
   const [userId, setuserId] = useState('')
   const [index, setindex] = useState('')
   const [productVariation, setproductVariation] = useState(1)
@@ -49,6 +51,9 @@ function Home() {
               return responseFromAPI
             })
           })
+          axios.get(productURI).then((res) => {
+            setotherProduct(() => { return res.data.result })
+          })
         }
         else {
           localStorage.removeItem('token')
@@ -59,9 +64,9 @@ function Home() {
   }
   const modalOut = (productDetail) => {
     console.log(productDetail);
-    setindex(()=>{return productDetail.index})
-    setproductTittle(()=>{return productDetail.titleOfProduct})
-    setproductPrice(()=>{return productDetail.priceOfProduct})
+    setindex(() => { return productDetail.index })
+    setproductTittle(() => { return productDetail.titleOfProduct })
+    setproductPrice(() => { return productDetail.priceOfProduct })
   }
   const addToCart = (product) => {
     console.log(index);
@@ -74,7 +79,6 @@ function Home() {
     })
   }
   const contShopping = (product) => {
-    console.log(product);
     axios.post(CARTURI, product).then((res) => {
       const responseFromCart = res.data
       setproductVariation(0)
@@ -90,9 +94,9 @@ function Home() {
     })
   }
   const decreament = () => {
-      setproductVariation(() => {
-          return productVariation - 1
-      })
+    setproductVariation(() => {
+      return productVariation - 1
+    })
   }
   return (
     <>
@@ -190,22 +194,44 @@ function Home() {
                         <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
                           <img src={eachProduct.image} className="card-img-top mx-auto w-50 h-50" alt="..." />
                           <div className="card-body">
-                            <h6 className="card-title">{eachProduct.title}</h6>
+                            <h6 className="card-title text-start">{eachProduct.title}</h6>
                             <div className='d-flex justify-content-between'>
                               <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating.rate}</p>
-                              <p className=''><span className='fw-bold'>COUNT </span>: {eachProduct.rating.count}</p>
                             </div>
                             <p className="card-text text-start">Price : ₦{Math.round(eachProduct.price * 50)} <span >per product</span></p>
                           </div>
                           <div className="card-footer">
-                            <small className="text-muted"><button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({index, titleOfProduct: eachProduct.title, priceOfProduct: Math.round(eachProduct.price * 50)})} >
+                            <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({ index, titleOfProduct: eachProduct.title, priceOfProduct: Math.round(eachProduct.price * 50) })} >
                               Add To Cart <FaCartPlus size='4vh' className='float-start' />
-                            </button></small>
+                            </button>
                           </div>
                         </div>
                       </div>
                     ))
                   }
+                  <div className='row'>
+                    {
+                      otherProduct.map((eachProduct, index) => (
+                        <div className='col-lg-3 col-md-6 mt-3' key={index}>
+                          <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
+                            <img src={eachProduct.image} className="card-img-top mx-auto w-75 h-50" alt="..." />
+                            <div className="card-body">
+                              <h6 className="card-title text-start">{eachProduct.title}</h6>
+                              <div className='d-flex justify-content-between'>
+                                <p className=''><span className='fw-bold'>RATING </span>: {eachProduct.rating}</p>
+                              </div>
+                              <p className="card-text text-start">Price : ₦{Math.round(eachProduct.price)} <span >per product</span></p>
+                            </div>
+                            <div className="card-footer">
+                              <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({ index, titleOfProduct: eachProduct.title, priceOfProduct: Math.round(eachProduct.price) })} >
+                                Add To Cart <FaCartPlus size='4vh' className='float-start' />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </div>
                   <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                       <div className="modal-content">

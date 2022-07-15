@@ -1,14 +1,19 @@
 import React from 'react'
 import user from '../Images/user.PNG'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaCartArrowDown, FaRegUser } from 'react-icons/fa'
 import { FaRegBookmark } from 'react-icons/fa'
 import { BiCertification } from "react-icons/bi";
 import { MdAutorenew } from "react-icons/md";
 import style from './style.css'
-function AdminNav() {
+function AdminNav({firstname}) {
+    const navigate = useNavigate()
     const logOut=()=>{
-
+        if(window.confirm(`Are you sure to log out ?`)){
+            localStorage.removeItem('admintoken')
+            localStorage.removeItem('adminInfo')
+            navigate('/admin_login')
+        }
     }
   return (
     <>
@@ -21,7 +26,7 @@ function AdminNav() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-5" style={{ marginLeft: '6vh' }}>
                     <li className="nav-item ms-3">
-                        <Link to='' className="nav-link active text-light ">Home</Link>
+                        <Link to='/admin/' className="nav-link active text-light ">Home</Link>
                     </li>
                     {/* <li className="nav-item ms-3">
                         <Link to='' className="nav-link active text-light">About us</Link>
@@ -33,7 +38,7 @@ function AdminNav() {
                         <Link to='/admin/customers' className="nav-link active text-light">Customer List</Link>
                     </li>
                     <li className="nav-item ms-3">
-                        <Link to='/admin/new product' className="nav-link active text-light position-relative"> upload products </Link>
+                        <Link to='/admin/addProduct' className="nav-link active text-light position-relative"> upload products </Link>
                     </li>
                 </ul>
                 <form className='ms-4 d-flex'>
@@ -42,10 +47,10 @@ function AdminNav() {
                 </form>
                 <div className="nav-item dropdown ms-3">
                     <button type="button" className="btn bgs rounded-circle dropdown-toggle" id='navbarDropdown' data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src={user} className='card-img-top rounded-circle' style={{ width: '5vh', height: '5vh' }} /><span className='text-light'>Hi, firstname</span>
+                        <img src={user} className='card-img-top rounded-circle' style={{ width: '5vh', height: '5vh' }} /><span className='text-light'>Hi, {firstname}</span>
                     </button>
                     <ul className="dropdown-menu text-light" aria-labelledby="navbarDropdown">
-                        <li><Link to="/homepage/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
+                        <li><Link to="/admin/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
                         <li><Link to="/admin/signup" className="dropdown-item"><FaRegBookmark /> Add member</Link></li>
                         <li><Link to="" className="dropdown-item"><BiCertification /> Settings</Link></li>
                         <li><Link to="" className="dropdown-item"><MdAutorenew /> Switch account</Link></li>

@@ -3,6 +3,7 @@ const { userModel } = require("../Model/user.model")
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
 const cloudinary = require('cloudinary')
+const { productModel } = require("../Model/admin.model")
 const SECRET = process.env.JWT_SECRET
 const EMAIL = process.env.EMAIL
 const PASSWORD = process.env.PASSWORD
@@ -200,5 +201,14 @@ const saveProfile = (req, res) => {
         }
     })
 }
+const product=(req, res)=>{
+    productModel.find((err, result)=>{
+        if(err){
+            res.send({message: `Internal server error`, status: false})
+        }else{
+            res.send({result, status: true})
+        }
+    })
+}
 
-module.exports = { getLandingPage, signup, signin, home,getUser, getCart, cartProduct, removeCartItem, saveProfile }
+module.exports = { getLandingPage, signup, signin, home,getUser, getCart, cartProduct, removeCartItem, saveProfile, product }

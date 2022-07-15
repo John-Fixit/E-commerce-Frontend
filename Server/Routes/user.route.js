@@ -10,4 +10,5 @@ userRouter.post('/cart', userController.cartProduct)
 userRouter.post('/removeCartItem', userController.removeCartItem)
 userRouter.post('/carts', userController.getCart)
 userRouter.post('/save', userController.saveProfile)
+userRouter.get('/products', userController.product)
 module.exports = userRouter

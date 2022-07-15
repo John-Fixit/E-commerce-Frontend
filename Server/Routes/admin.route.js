@@ -4,5 +4,7 @@ const adminController = require('../Controller/admin.controller')
 adminRouter.post('/signup', adminController.signup)
 adminRouter.post('/signin', adminController.signin)
 adminRouter.get('/home', adminController.authorizeUser)
-
+adminRouter.get('/customers', adminController.customer)
+adminRouter.post('/products', adminController.products)
+adminRouter.post('/deleteCustomer', adminController.deleteCustomer)
 module.exports = adminRouter

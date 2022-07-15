@@ -24,9 +24,7 @@ function Navbar({thisuser}) {
             setprofilePhoto(()=>{
                 return thisuser.profilePhoto
             })
-        }else{
-        setcartProduct(() => { return `0`}) 
-    }
+        }
     }, [])
     const logOut = () => {
         if (window.confirm(`Are you sure to log out ?`)) {

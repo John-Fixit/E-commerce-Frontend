@@ -73,10 +73,10 @@ function Signin() {
                                     <p className='text-muted'>Don't have an account <Link to='/signup' className='text-decoration-none'>Sign up</Link></p>
                                 </div>
                                 <div className='col-12 mt-3'>
-                                    <p className='text-muted'>Login as an admin <Link to='/admin/signin' className='text-decoration-none'>Sign up</Link></p>
+                                    <p className='text-muted'>Login as an admin <Link to='/admin_login' className='text-decoration-none'>Sign in</Link></p>
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
-                                    <button className='btn btn-danger' type='submit'>Create account</button>
+                                    <button className='btn btn-danger' type='submit'>Log in</button>
                                 </div>
                             </form>
                         </div>

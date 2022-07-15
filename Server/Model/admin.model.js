@@ -10,6 +10,13 @@ const adminSchema = new mongoose.Schema({
     password: String,
     privateKey: String
 })
+const product = new mongoose.Schema({
+    image: String,
+    title: String,
+    price: String,
+    rating: String
+
+})
 
 const saltRound = 10;
 let roundNum = Math.floor(Math.random()*1000000)
@@ -20,7 +27,6 @@ adminSchema.pre('save', function(next){
         }else{
             this.password = hashedPassword
             this.privateKey = roundNum
-            // console.log(this.privateKey);
             next()
         }
     })
@@ -35,4 +41,5 @@ adminSchema.methods.validatePassword = function (password, callback){
     })
 }
 const adminModel = mongoose.model('admin_tb', adminSchema)
-module.exports = {adminModel}
+const productModel = mongoose.model('products_tb', product)
+module.exports = {adminModel, productModel}
