@@ -5,6 +5,7 @@ require('dotenv').config()
 const PORT = process.env.PORT
 const URL = process.env.URL
 const userRouter = require('./Routes/user.route')
+const adminRouter = require('./Routes/admin.route')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const { json } = require('express');
@@ -20,6 +21,7 @@ mongoose.connect(URL, (err)=>{
     }
 })
 app.use('/user', userRouter)
+app.use('/admin', adminRouter)
 
 
 app.listen(PORT, ()=>{

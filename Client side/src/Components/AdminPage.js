@@ -14,7 +14,6 @@ function AdminPage() {
     <AdminNav />
         <Routes>
             <Route path='/' element={<AdminHome />}/>
-            <Route path='/signin' element={<AdminSignin />}/>
             <Route path='/customers' element={<CustomerList />}/>
             <Route path='/new product' element={<UploadProducts />} />
             <Route path='/signup' element={<Adminsignup />}/>

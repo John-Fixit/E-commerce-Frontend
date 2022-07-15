@@ -8,7 +8,7 @@
                 }
 
                 .products_row {
-                    padding: 3vh 7vh !important;
+                    padding: 3vh 6vh !important;
                 }
 
                 /*----------------- Navbar--------------------- */
@@ -22,7 +22,7 @@
                 }
 
                 .bgs {
-                    background-color: #FF5722;
+                    background-color: #FF5722 !important;
                 }
 
                 /*------------------------- Cart ---------------------*/
@@ -34,6 +34,11 @@
                     background-color: #FF5722 !important;
                 }
 
+                /*-----------------------admin ----------------------*/
+                .small_text{
+                    font-size: 2vh;
+                }
+              
                 @media screen and (max-width: 890px) and (min-width: 50px) {
                     .carousel_img {
                         height: 40vh !important;

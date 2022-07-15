@@ -4,6 +4,8 @@ import Signup from './Components/SignUp'
 import Signin from './Components/Signin'
 import Homepage from './Components/Homepage'
 import AdminPage from './Components/AdminPage'
+import AdminSignin from './Components/AdminSignin'
+import AdminHome from './Components/AdminHome'
 function App() {
 
   return (
@@ -11,6 +13,7 @@ function App() {
       <Routes>
         <Route path='/homepage/*' element={<Homepage />} />
         <Route path='/signup' element={<Signup />} />
+        <Route path='/admin_login' element={<AdminSignin />}/>
         <Route path='/signin' element={<Signin />} />
         <Route path='/admin/*' element={<AdminPage />} />
       </Routes>
