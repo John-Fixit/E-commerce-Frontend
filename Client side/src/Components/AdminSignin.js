@@ -18,7 +18,6 @@ function AdminSignin() {
     },
     onSubmit: (values) => {
       axios.post(signinURI, values).then((res) => {
-        console.log(res);
         setisLoading(false)
         const responseFromServer = res.data
         setstatus(responseFromServer.status)

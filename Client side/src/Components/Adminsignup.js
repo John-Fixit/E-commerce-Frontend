@@ -18,6 +18,7 @@ function Adminsignup() {
       email: '',
       gender: '',
       profilePhoto: '',
+      username: '',
       password: '',
       privateKey: ''
     },
@@ -35,7 +36,6 @@ function Adminsignup() {
       lastname: yup.string().required('This field is required'),
       contact: yup.string().required('This field is required').matches(contactRegex, 'contact must start from zero and be valid 11 digit'),
       email: yup.string().required('This field is required').email('Please input a valid email'),
-      
       password: yup.string().required('This field is required').matches(passRegex, 'Password must not less than six character'),
     })
   })
@@ -99,6 +99,15 @@ function Adminsignup() {
                     <option value='3'>Female</option>
                   </select>
                   <label htmlFor='' >Gender(optional)</label>
+                </div>
+                <div className='username'>
+                  <div className='form-floating mt-2'>
+                    <input type='text' className='form-control' name='username' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='username' />
+                    <label htmlFor=''>username</label>
+                  </div>
+                  {
+                    formik.touched.email ? <small className='text-danger'>{formik.errors.email}</small> : ''
+                  }
                 </div>
                 <div className='password'>
                   <div className='form-floating mt-2'>

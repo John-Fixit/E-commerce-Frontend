@@ -7,4 +7,8 @@ adminRouter.get('/home', adminController.authorizeUser)
 adminRouter.get('/customers', adminController.customer)
 adminRouter.post('/products', adminController.products)
 adminRouter.post('/deleteCustomer', adminController.deleteCustomer)
+adminRouter.post('/deleteStaff', adminController.deleteStaff)
+adminRouter.post('/deleteProduct', adminController.deleteProduct)
+adminRouter.post('/save', adminController.saveProfile)
+adminRouter.post('/uploadProfilePhoto', adminController.profilePhoto)
 module.exports = adminRouter

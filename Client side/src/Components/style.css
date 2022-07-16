@@ -38,7 +38,13 @@
                 .small_text{
                     font-size: 2vh;
                 }
-              
+                .macque{
+                   width: 100% !important;
+                }
+                .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+                    background-color: #FF5722;
+                    color: white;
+                  }
                 @media screen and (max-width: 890px) and (min-width: 50px) {
                     .carousel_img {
                         height: 40vh !important;
@@ -47,7 +53,6 @@
                     .products_row {
                         padding: 3vh 0vh !important;
                     }
-
                     /*----------------- Navbar--------------------- */
                     .padding_nav {
                         padding: 2vh 0vh !important;

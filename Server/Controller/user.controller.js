@@ -181,6 +181,7 @@ const removeCartItem = (req, res) => {
 const saveProfile = (req, res) => {
     const userDetails = req.body
     const profilePhoto = userDetails.profilePhoto
+    const userId = req.body.userId
     const userEmail = req.body.email
     const firstname = req.body.firstname
     const lastname = req.body.lastname

@@ -8,6 +8,7 @@ import CustomerList from './CustomerList'
 import Footage from './Footage'
 import UploadProducts from './UploadProducts'
 import axios from 'axios'
+import AdminProfile from './AdminProfile'
 
 function AdminPage() {
 
@@ -18,6 +19,8 @@ function AdminPage() {
   const [staff, setstaff] = useState([])
   const [products, setproducts] = useState('')
   const [firstname, setfirstname] = useState('')
+  const [profilePhoto, setprofilePhoto] = useState('')
+  const [adminDetail, setadminDetail] = useState('')
   useEffect(() => {
     authorizeUser()
   }, [])
@@ -31,12 +34,13 @@ function AdminPage() {
       }
     }).then((res) => {
       const responseFromServer = res.data.thisadmin
+      setadminDetail(()=>{return res.data.thisadmin})
       if (res.data.status) {
-        const adminInfo = { _id: responseFromServer._id, email: responseFromServer.email, firstname: responseFromServer.firstname, lastname: responseFromServer.lastname }
+        const adminInfo = { adminId: responseFromServer._id, email: responseFromServer.email, firstname: responseFromServer.firstname, lastname: responseFromServer.lastname }
         localStorage.setItem('adminInfo', JSON.stringify(adminInfo))
         setfirstname(()=>{return responseFromServer.firstname})
+        setprofilePhoto(()=>{return responseFromServer.profilePhoto})
         axios.get(customerURI).then((res) => {
-          console.log(res.data.product);
           if(res.data.status){
             setcustomers (()=>{return res.data.customers})
             setstaff (()=>{return res.data.admins})
@@ -58,12 +62,13 @@ function AdminPage() {
 
   return (
     <>
-    <AdminNav firstname = {firstname}/>
+    <AdminNav firstname = {firstname} profilePhoto={profilePhoto}/>
         <Routes>
             <Route path='/' element={<AdminHome customers={customers} staff={staff} products={products}/>}/>
             <Route path='/customers' element={<CustomerList customers={customers} staff={staff}/>}/>
             <Route path='/addProduct' element={<UploadProducts />} />
             <Route path='/signup' element={<Adminsignup />}/>
+            <Route path='/profile' element={<AdminProfile adminDetail={adminDetail}/>} />
         </Routes>
         <Footage />
     </>

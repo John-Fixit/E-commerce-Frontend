@@ -43,6 +43,7 @@ const signin = (req, res) => {
     adminModel.findOne({ 'email': email }, (err, thisUser) => {
         if (err) {
             console.log(`Internal server error!`);
+            res.send({messsage: `Network error! please check your connection`, status: false})
         } else {
             if (!thisUser) {
                 res.send({ message: `No account of this details with us !!!`, status: false })
@@ -50,7 +51,7 @@ const signin = (req, res) => {
             else {
                 thisUser.validatePassword(password, (err, result) => {
                     if (err) {
-                        res.send({ message: `Internal server error`, status: false })
+                        res.send({ message: `Internal server error, please check your connection`, status: false })
                     } else {
                         if (result) {
                             if (thisUser.privateKey == privateKey) {
@@ -97,13 +98,11 @@ const customer = (req, res) => {
                     res.send({ message: `Internal server error`, status: false })
                 }
                 else {
-                    console.log(admins);
-                    productModel.find((err, products) => {                    
+                    productModel.find((err, products) => {
                         if (err) {
                             res.send({ message: `Internal server error`, status: false })
                         }
                         else {
-                            console.log(products);
                             res.send({ customers, admins, products, status: true })
                         }
                     })
@@ -115,11 +114,20 @@ const customer = (req, res) => {
 
 const deleteCustomer = (req, res) => {
     const customerId = req.body.customerId
-    console.log(customerId);
     userModel.findOneAndDelete({ '_id': customerId }, (err, otherCustomers) => {
         if (err) {
             res.send({ message: `Internal server error, customer could'nt deleted`, status: false })
-            console.log(`internal server error`);
+        }
+        else {
+            res.send({ message: `User has been deleted successfully`, status: true })
+        }
+    })
+}
+const deleteStaff = (req, res) => {
+    const staffId = req.body.staffId
+    adminModel.findOneAndDelete({ '_id': staffId }, (err, otherStaff) => {
+        if (err) {
+            res.send({ message: `Internal server error, customer could'nt deleted`, status: false })
         }
         else {
             res.send({ message: `User has been deleted successfully`, status: true })
@@ -137,7 +145,6 @@ const products = (req, res) => {
     cloudinary.v2.uploader.upload(productImage, (err, result) => {
         if (err) {
             res.send({ message: `Network problem, unable to upload` })
-            console.log(`internal server error`);
         } else {
             const image = result.secure_url
             const productDetail = { image, title, rating, price }
@@ -153,5 +160,47 @@ const products = (req, res) => {
         }
     })
 }
-
-module.exports = { signup, signin, authorizeUser, customer, products, deleteCustomer }
+const saveProfile = (req, res) => {
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    const email = req.body.email;
+    const username = req.body.username;
+    const adminId = req.body.adminId;
+    const contact = req.body.contact;
+    adminModel.findOneAndUpdate({ '_id': adminId }, { $set: { 'firstname': firstname, 'lastname': lastname, 'email': email, 'username': username, 'contact': contact } }, (err, result) => {
+        if (err) {
+            res.send({ message: `Internal server error`, status: false })
+        } else {
+            res.send({ message: `Profile Edited successfully`, status: true })
+        }
+    })
+}
+const profilePhoto = (req, res) => {
+    const myFile = req.body.convertedFile
+    const adminId = req.body.adminId
+    cloudinary.v2.uploader.upload(myFile, (err, uploadedFile) => {
+        if (err) {
+            res.send({ message: `Internal server error, image could'nt uploaded!`, status: false })
+        } else {
+            const profilePhoto = uploadedFile.secure_url
+            adminModel.findOneAndUpdate({ '_id': adminId }, { 'profilePhoto': profilePhoto }, (err, result) => {
+                if (err) {
+                    res.send({ message: `Internal server error`, status: false })
+                } else {
+                    res.send({ message: `Profile photo uploaded successfully`, status: true })
+                }
+            })
+        }
+    })
+}
+const deleteProduct=(req, res)=>{
+    const productId = req.body.productId
+    productModel.findOneAndDelete({'_id': productId}, (err, result)=>{
+        if(err){
+            res.send({message: `Network error! unable to delete Product`, status: false})
+        }else{
+            res.send({message: `Product deleted successfully`, status: true})
+        }
+    })
+}
+module.exports = { signup, signin, authorizeUser, customer, products, deleteCustomer, deleteStaff, saveProfile, profilePhoto, deleteProduct }

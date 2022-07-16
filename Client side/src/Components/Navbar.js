@@ -64,7 +64,7 @@ function Navbar({thisuser}) {
                             <button className='btn btn-outline-light ms-3'>Search</button>
                         </form>
                         <div className="nav-item dropdown ms-3">
-                            <button type="button" className="btn bgs rounded-circle dropdown-toggle" id='navbarDropdown' data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" className="border-0 bgs text-light dropdown-toggle" id='navbarDropdown' data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src={ profilePhoto != '' ? profilePhoto : user} className='card-img-top rounded-circle' style={{ width: '7vh', height: '7vh' }} /><span className='text-light'> Hi, {firstname}</span>
                             </button>
                             <ul className="dropdown-menu text-light" aria-labelledby="navbarDropdown">
