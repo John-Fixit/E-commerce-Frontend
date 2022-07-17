@@ -93,7 +93,7 @@ function AdminProfile({ adminDetail }) {
                                         <input type='file' className='form-control border-0 border-bottom border-dark' placeholder='Upload' onChange={(e) => selectPhoto(e)} />
                                     </div>
                                     <div className='col-sm-4'>
-                                        <button className='btn btnbg w-100 text-light py-3' onClick={savePhoto}>Save </button>
+                                        <button className='btn btnbg w-100 text-light py-3' onClick={savePhoto}>Save Profile Picture</button>
                                     </div>
                                 </div>
                                 <h4 className='card-header'>Details</h4>

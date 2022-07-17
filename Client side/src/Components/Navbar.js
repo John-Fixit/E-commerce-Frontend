@@ -20,12 +20,13 @@ function Navbar({thisuser}) {
     useEffect(() => {
         if(thisuser !=''){
             setcartProduct(() => { return thisuser.cartProduct.length })
-            setfirstname(() => { return thisuser.firstname })
+            setfirstname(() => { return thisuser.username })
             setprofilePhoto(()=>{
                 return thisuser.profilePhoto
             })
         }
-    }, [])
+
+    })
     const logOut = () => {
         if (window.confirm(`Are you sure to log out ?`)) {
             localStorage.removeItem('token')

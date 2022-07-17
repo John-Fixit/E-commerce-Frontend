@@ -69,7 +69,6 @@ function Home() {
     setproductPrice(() => { return productDetail.priceOfProduct })
   }
   const addToCart = (product) => {
-    console.log(index);
     axios.post(CARTURI, product).then((res) => {
       const responseFromCart = res.data
       setproductVariation(0)

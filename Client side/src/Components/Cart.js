@@ -59,7 +59,7 @@ function Cart() {
                                                 </div>
                                             </div>
                                             <div className='col-sm-3 text-end'>
-                                                <h4>Price ₦ {eachProduct.productPrice * eachProduct.productVariation}</h4>
+                                                <h4>Price ₦ {eachProduct.productPrice}</h4>
                                             </div>
                                         </div>
                                         <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>

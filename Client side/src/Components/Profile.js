@@ -19,19 +19,19 @@ function Profile() {
     const GETUSERURI = 'http://localhost:4000/user/thisuser'
     let userId
     if (localStorage.userDetails) {
-         userId = userDetails._id
+        userId = userDetails._id
     }
     useEffect(() => {
         getUser()
     }, [])
     const getUser = () => {
-        axios.post(GETUSERURI, {userId}).then((res)=>{
+        axios.post(GETUSERURI, { userId }).then((res) => {
             const thisUser = res.data.user
-            setfirstname(()=>{return thisUser.firstname})
-            setlastname(()=>{return thisUser.lastname})
-            setemail(()=>{return thisUser.email})
-            setcontact(()=>{return thisUser.contact})
-            setusername(()=>{return thisUser.username})
+            setfirstname(() => { return thisUser.firstname })
+            setlastname(() => { return thisUser.lastname })
+            setemail(() => { return thisUser.email })
+            setcontact(() => { return thisUser.contact })
+            setusername(() => { return thisUser.username })
         })
     }
     const editProfile = () => {
@@ -62,6 +62,10 @@ function Profile() {
                             </div>
                         </div>
                         <div className='col-lg-9 shadow-sm py-5'>
+                            <div className='col-12 form-floating'>
+                                <input type='file' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Upload' onChange={(e) => selectPhoto(e)} />
+                                <label htmlFor='' >Upload profile photo(optional)</label>
+                            </div>
                             <div className='card h-100 p-2'>
                                 <h4 className='card-header'>Details</h4>
                                 <div className='row mt-3'>
@@ -99,14 +103,11 @@ function Profile() {
                                     </div>
                                 </div>
                                 <div className='row mt-3'>
-                                <div className='col-6 form-floating'>
+                                    <div className='col-6 form-floating'>
                                         <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} value={username} placeholder='username' onChange={(e) => selectPhoto(e)} />
                                         <label htmlFor='' >Username(optional)</label>
                                     </div>
-                                    <div className='col-6 form-floating'>
-                                        <input type='file' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='Upload' onChange={(e) => selectPhoto(e)} />
-                                        <label htmlFor='' >Upload profile photo(optional)</label>
-                                    </div>
+
                                 </div>
                                 <div className='row shadow mt-4 btn-group pb-3'>
                                     <div className='col-6'>

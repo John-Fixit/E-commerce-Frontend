@@ -10,16 +10,36 @@ import { FaCartPlus, FaProductHunt, FaTrash, FaTrashAlt, FaUserAlt, FaUserAstron
 function AdminHome({ customers, staff, products }) {
   const deleteProductURI = 'http://localhost:4000/admin/deleteProduct'
   const [message, setmessage] = useState('')
-  const [status, setstatus] = useState(false)
-  const deleteProduct = ({ productId }) => {
-    axios.post(deleteProductURI, { productId }).then((res) => {
-      if (res.data.status) {
-        window.location.reload()
-      } else {
-        setmessage(res.data.message)
-        setstatus(res.data.status)
-      }
-    })
+  const [status, setstatus] = useState(true)
+  const [productName, setproductName] = useState('')
+  const [productToDelete, setproductToDelete] = useState('')
+  const [productId, setproductId] = useState('')
+  const [isComing, setisComing] = useState(true)
+  const [isLoading, setisLoading] = useState(true)
+
+  const modalOut = (productDetail) => {
+    setproductToDelete(() => { return productDetail.productTitle })
+    setproductId(productDetail.productId)
+  }
+  const handleOnChange = (e) => {
+    setproductName(() => { return e.target.value })
+    if (productToDelete == e.target.value) {
+      setisComing(false)
+    }
+    else{
+      setisComing(true)
+    }
+  }
+  const deleteProduct = () => {
+      axios.post(deleteProductURI, { productId }).then((res) => {
+        setisLoading(false)
+        if (res.data.status) {
+          window.location.reload()
+        } else {
+          setmessage(res.data.message)
+          setstatus(res.data.status)
+        }
+      })
   }
   return (
     <>
@@ -39,8 +59,8 @@ function AdminHome({ customers, staff, products }) {
                 <img src={img4} className="d-block" width='25%' alt="..." />
               </div>
               <div className="carousel-caption d-none d-md-block">
-                <h5>First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
+                <h5></h5>
+                <p></p>
               </div>
             </div>
             <div className="carousel-item">
@@ -51,8 +71,8 @@ function AdminHome({ customers, staff, products }) {
                 <img src={img2} className="d-block " width='25%' alt="..." />
               </div>
               <div className="carousel-caption d-none d-md-block">
-                <h5>Second slide label</h5>
-                <p>Some representative placeholder content for the second slide.</p>
+                <h5></h5>
+                <p></p>
               </div>
             </div>
             <div className="carousel-item">
@@ -62,10 +82,7 @@ function AdminHome({ customers, staff, products }) {
                 <img src={img1} className="d-block" width='25%' alt="..." />
                 <img src={img2} className="d-block" width='25%' alt="..." />
               </div>
-              <div className="carousel-caption d-none d-md-block">
-                <h5>Third slide label</h5>
-                <p>Some representative placeholder content for the third slide.</p>
-              </div>
+
             </div>
           </div>
           <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
@@ -109,8 +126,8 @@ function AdminHome({ customers, staff, products }) {
           </div>
         </div>
         {
-          products.length < 1 ? <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+          products.length < 1 ? <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div> :
             <div className='col-sm-12 products_row'>
               <p className='card-header text-center text-muted fs-4'>All Products Available</p>
@@ -118,7 +135,7 @@ function AdminHome({ customers, staff, products }) {
               <div className='row'>
                 {
                   products.map((eachProduct, index) => (
-                    <div className='col-lg-3 col-md-6 col-sm-12 mt-3'>
+                    <div className='col-lg-3 col-md-6 col-sm-12 mt-3' key={index}>
                       <div className='card shadow p-2 h-100'>
                         <img src={eachProduct.image} className='card-img-top mx-auto' />
                         <div className='card-body'>
@@ -127,7 +144,7 @@ function AdminHome({ customers, staff, products }) {
                           <p className="card-text text-start">Price : ₦{eachProduct.price} <span >per product</span></p>
                         </div>
                         <div className="card-footer">
-                          <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => deleteProduct({ productId: eachProduct._id })} ><FaTrashAlt size='4vh' className='float-star' /><small> Delete</small></button>
+                          <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({ productId: eachProduct._id, productTitle: eachProduct.title })} ><FaTrashAlt size='3vh' className='float-star' /><small> Delete</small></button>
                         </div>
                       </div>
                     </div>
@@ -135,8 +152,30 @@ function AdminHome({ customers, staff, products }) {
                 }
               </div>
             </div>
-
         }
+
+        {
+          status ?
+            <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h6 className="modal-title mx-auto" id="exampleModalLabel">Are you absolutely sure to delete this product</h6>
+                  </div>
+                  <div className="modal-body">
+                    <label htmlFor=''>Please type <b>{productToDelete}</b> to comfirm</label>
+                    <input type='text' className='form-control' onChange={ handleOnChange} />
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" className={isComing ? "btn btnbg disabled text-light" : "btn btnbg  text-light"} onClick={deleteProduct}>Delete Product</button>
+                  </div>
+                </div>
+              </div>
+            </div> :
+            <p className='alert alert-danger'>{message}</p>
+        }
+
       </div>
     </>
   )

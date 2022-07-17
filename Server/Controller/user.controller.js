@@ -140,8 +140,8 @@ const getCart = (req, res) => {
 const cartProduct = (req, res) => {
     const productImage = req.body.productImage
     const productTitle = req.body.title
-    const productPrice = req.body.price
     const productVariation = req.body.productVariation
+    const productPrice = req.body.price * productVariation
     const userId = req.body.userId
     userModel.findOneAndUpdate({ '_id': userId }, { $push: { 'cartProduct': { productImage, productPrice, productTitle, productVariation } } }, (err, updatedVersion) => {
         if (err) {
