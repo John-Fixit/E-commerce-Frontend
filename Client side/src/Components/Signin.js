@@ -5,12 +5,15 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import style from './style.css'
 function Signin() {
     const navigate = useNavigate()
     const SIGNINURI = 'http://localhost:4000/user/signin'
     const [status, setstatus] = useState('')
     const [message, setmessage] = useState('')
     const [token, settoken] = useState('')
+    const [isLoading, setisLoading] = useState(true)
+    const [isGoing, setisGoing] = useState(false)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -18,10 +21,11 @@ function Signin() {
         },
         onSubmit: (values) => {
             const authDetails = values;
+            setisGoing(true)
             axios.post(SIGNINURI, authDetails).then((res) => {
                 let feedBack = res.data
-                console.log(res);
-                // setmessage(feedBack.message)
+                setisLoading(false)
+                setisGoing(false)
                 setstatus(feedBack.status)
                 settoken(() => { return feedBack.token })
                 if (feedBack.status) {
@@ -43,7 +47,7 @@ function Signin() {
             <div className='container-fluid'>
                 <div className='col-lg-7 col-md-12 mx-auto my-5'>
                     <div className='form shadow'>
-                        <h1 className='card-header text-center text-muted border-bottom-0'>Sign in</h1>
+                        <h1 className='card-header text-center text-light border-bottom-0 btnbg'>Sign in</h1>
                         <div className='p-3'>
 
                             <form action='' onSubmit={formik.handleSubmit}>
@@ -69,14 +73,18 @@ function Signin() {
                                         !status ? <small className='text-danger text-center fs-4'>{message}</small> : ''
                                     }
                                 </div>
-                                <div className='col-12 mt-3'>
+                                <div className='row'>
+                                <div className='col-sm-6 mt-3'>
                                     <p className='text-muted'>Don't have an account <Link to='/signup' className='text-decoration-none'>Sign up</Link></p>
                                 </div>
-                                <div className='col-12 mt-3'>
+                                <div className='col-sm-6 mt-3 text-end'>
                                     <p className='text-muted'>Login as an admin <Link to='/admin_login' className='text-decoration-none'>Sign in</Link></p>
                                 </div>
+                                </div>
                                 <div className='col-12 mt-3 text-end'>
-                                    <button className='btn btn-danger' type='submit'>Log in</button>
+                                    <button className='btn btnbg px-5 text-light py-2' type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div> : 'Login account'}</button>
                                 </div>
                             </form>
                         </div>

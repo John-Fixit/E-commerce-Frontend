@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose')
+const nodemailer = require('nodemailer')
 require('dotenv').config()
 const PORT = process.env.PORT
 const URL = process.env.URL
@@ -22,8 +23,6 @@ mongoose.connect(URL, (err)=>{
 })
 app.use('/user', userRouter)
 app.use('/admin', adminRouter)
-
-
 app.listen(PORT, ()=>{
     console.log(`Server is listen on port ${PORT}`);
 })

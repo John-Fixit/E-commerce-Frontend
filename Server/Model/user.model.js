@@ -16,7 +16,6 @@ const saltRound = 10;
 userSchema.pre('save', function (next) {
     bcrypt.hash(this.password, saltRound, (err, hashedPassword) => {
         if (err) {
-            console.log(err);
             console.log(`there is error`);
         } else {
             this.password = hashedPassword

@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { FaDailymotion, FaTrash } from 'react-icons/fa' 
+import { FaDailymotion, FaTrash } from 'react-icons/fa'
 import img from '../Images/bgImg2.jpg'
 import style from './style.css'
 import { useNavigate } from 'react-router-dom'
+import PaystackPop from '@paystack/inline-js'
 function Cart() {
     const navigate = useNavigate()
     useEffect(() => {
@@ -11,15 +12,22 @@ function Cart() {
     }, [])
     const REMOVEURI = 'http://localhost:4000/user/removeCartItem'
     const CARTURI = 'http://localhost:4000/user/carts'
+    const paymentURI = 'http://localhost:4000/user/payment'
     const [product, setproduct] = useState([])
     const [checkOutAmount, setcheckOutAmount] = useState('')
     const [productVariation, setproductVariation] = useState(1)
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    const [email, setemail] = useState('')
+    const [contact, setcontact] = useState('')
+    const [username, setusername] = useState('')
     const userId = userDetails._id
     const getCart = () => {
-        axios.post(CARTURI, {userId}).then((res)=>{
+        axios.post(CARTURI, { userId }).then((res) => {
+            setemail(() => { return res.data.user.email })
+            setcontact(() => { return res.data.user.contact })
+            setusername(() => { return res.data.user.username })
             setproduct(() => { return res.data.products })
-            setcheckOutAmount(()=>{return res.data.totalPrice}) 
+            setcheckOutAmount(() => { return res.data.totalPrice })
         })
     }
     const increament = (index) => {
@@ -34,10 +42,27 @@ function Cart() {
         //     return parseInt(product[index].productVariation) -1
         //   })
     }
-    const removeItem = ({productImage}) => {
+    const removeItem = ({ productImage }) => {
         console.log(userId);
-        axios.post(REMOVEURI, {userId, productImage}).then((res)=>{
+        axios.post(REMOVEURI, { userId, productImage }).then((res) => {
             window.location.reload()
+        })
+    }
+    const payCheckOutAmount = (amountToPay) => {
+        const paystack = new PaystackPop()
+        paystack.newTransaction({
+            key: 'pk_test_8e0adf1d74b3595f09d84c9b4ec645477eeb20fd',
+            amount: amountToPay * 100,
+            email,
+            contact,
+            onSuccess:(transaction)=>{
+                const paymentDetail = {userId, username, amountToPay, email, paymentReference : transaction.reference}
+                axios.post(paymentURI, paymentDetail)
+                alert(`Payment was successfull! Reference ${transaction.reference}`)
+            },
+            oncancel:()=>{
+                console.log(`You unexpectedly close the payment log!`)
+            }
         })
     }
     return (
@@ -63,7 +88,7 @@ function Cart() {
                                             </div>
                                         </div>
                                         <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
-                                            <button className='textColor border-0 py-2 px-4 rounded-3' onClick={()=>removeItem({productImage: eachProduct.productImage})}><FaTrash /> Remove</button>
+                                            <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}><FaTrash /> Remove</button>
                                             <div className='row'>
                                                 {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
                                                 <p className='col-12'>{eachProduct.productVariation} product</p>
@@ -83,7 +108,7 @@ function Cart() {
                                 <p>Sub-Total</p>
                                 <h5>₦ {checkOutAmount}</h5>
                             </div>
-                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' >CHECKOUT ({checkOutAmount})</button>
+                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>CHECKOUT ({checkOutAmount})</button>
                         </div>
                     </div>
                 </div>

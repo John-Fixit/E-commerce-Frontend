@@ -18,18 +18,20 @@ cloudinary.config({
     api_key: API_KEY,
     api_secret: API_SECRET
 });
-
+var transporter = nodemailer.createTransport({
+    service: 'smtp@gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+        user: EMAIL,
+        pass: PASSWORD
+    }
+});
 const signup = (req, res) => {
     const userDetails = req.body
-    // var transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //         user: "jfixcoding@gmail.com",
-    //         pass: "<FIXgufaith996.com/>"
-    //     }
-    // });
     const userEmail = userDetails.email
-
+    const userFullName = userDetails.firstname + ' ' + userDetails.lastname
     userModel.findOne({ email: userDetails.email }, (err, user) => {
         if (err) {
             console.log(`error dey`);
@@ -41,23 +43,29 @@ const signup = (req, res) => {
                 const form = new userModel(userDetails)
                 form.save((err) => {
                     if (err) {
-                        res.status(501).send({ message: `error occur not registered`, status: false })
+                        res.status(501).send({ message: `Registration error, please checl your connection`, status: false })
                     } else {
-                        // var mailMessage = {
-                        //     from: 'adeoyejohn293@gmail.com',
-                        //     to: userEmail,
-                        //     subject: 'Registration successfull!',
-                        //     text: 'Welcome to JFIX E-commerce site'
-                        // }
-                        // transporter.sendMail(mailMessage, (err, info) => {
-                        //     if (err) {
-                        //         console.log(err);
-                        //     }
-                        // else {
-                        // console.log(info.response);
-                        res.status(200).send({ message: `Registration successfull`, status: true, })
-                        // }
-                        // })
+                        var mailMessage = {
+                            from: EMAIL,
+                            to: userEmail,
+                            subject: 'Registration Confirmation',
+                            html: `<b class='card-title'>Dear ${userFullName},</b>
+                            <p >Welcome to JFIX e-commerce site!</p>
+                            <p >Congratulations! your e-commerce account has been successfully created.</p>
+                            <p >With JFIX e-commerce site, you can now enjoy peace mind of shopping without cash involved. it's a simple, fast and secure.</p>
+                            <p>click on this <a href='https://google.com'>link</a> to sign in to your account
+                            Thank you!`
+                        }
+                        transporter.sendMail(mailMessage, (err, info) => {
+                            if (err) {
+                                console.log(err);
+                                res.send({message: `Email invalid`, status: false})
+                            }
+                            else {
+                                console.log(info.response);
+                                res.status(200).send({ message: `Registration successfull !!!`, status: true, })
+                            }
+                        })
                     }
                 })
             }
@@ -133,7 +141,7 @@ const getCart = (req, res) => {
             user.cartProduct.map((eachProduct) => {
                 totalPrice += parseInt(eachProduct.productPrice)
             })
-            res.send({ message: `Cart products`, products: user.cartProduct, status: true, totalPrice })
+            res.send({ message: `Cart products`, user, products: user.cartProduct, status: true, totalPrice })
         }
     })
 }
@@ -191,7 +199,7 @@ const saveProfile = (req, res) => {
             console.log(`Unable to upload, due to internal server error`);
         } else {
             const uploadedPhoto = result.secure_url
-            userModel.findOneAndUpdate({ 'email': userEmail }, { $set: {'profilePhoto': uploadedPhoto,  'firstname': firstname, 'lastname': lastname, 'contact': contact } }, (err, result) => {
+            userModel.findOneAndUpdate({ 'email': userEmail }, { $set: { 'profilePhoto': uploadedPhoto, 'firstname': firstname, 'lastname': lastname, 'contact': contact } }, (err, result) => {
                 if (err) {
                     console.log(err);
                     console.log(`error dey`);
@@ -202,14 +210,88 @@ const saveProfile = (req, res) => {
         }
     })
 }
-const product=(req, res)=>{
-    productModel.find((err, result)=>{
-        if(err){
-            res.send({message: `Internal server error`, status: false})
-        }else{
-            res.send({result, status: true})
+const product = (req, res) => {
+    productModel.find((err, result) => {
+        if (err) {
+            res.send({ message: `Internal server error`, status: false })
+        } else {
+            res.send({ result, status: true })
+        }
+    })
+}
+const payment = (req, res) => {
+    const paymentReference = req.body.paymentReference
+    const userId = req.body.userId
+    const email = req.body.email
+    const username = req.body.username
+    const amountToPay = req.body.amountToPay
+    if (paymentReference) {
+        userModel.findOne({ '_id': userId }, (err, user) => {
+            if (err) {
+                res.send({ message: `Internal server error`, status: false })
+            }
+            else {
+                var mailMessages = {
+                    from: EMAIL,
+                    to: email,
+                    subject: 'Payment successfull!',
+                    html: `<b class='card-title'>Dear ${username},</b>
+                        <p >Congratulations! transaction of ${amountToPay} was successfull, for the purchase  of product at JFIX e-commerce.</p>
+                        <p >Thanks for buying from JFIX e-commerce.</p>
+                        Thank you!
+                    `
+                }
+                transporter.sendMail(mailMessages, (err, info)=>{
+                    if(err){
+                        console.log(err);
+                        res.send({message:`Error occur in the transaction`, status: false})
+                    }else{
+                        res.send({message:` transaction successfull`, status: true})
+                    }
+                })
+            }
+        })
+    }
+    else {
+        
+        res.send({ message: `Dear ${email}, Your payment is not yet done, invalid payment!`, status: false })
+        console.log(`Dear ${email}, Your payment is not yet done, invalid payment!`);
+    }
+
+}
+const sendEmail = (req, res) => {
+    const userEmail = req.body.email
+    var transporter = nodemailer.createTransport({
+        service: 'smtp@gmail.com',
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD
+        }
+    })
+    var mailMessages = {
+        from: EMAIL,
+        to: userEmail,
+        subject: 'Registration Confirmation',
+        html: `<b class='card-title'>Dear ${userEmail},</b>
+            <p >Welcome to JFIX commerce site!</p>
+            <p >Congratulations! your JFIX e-commerce account has been successfully created.</p>
+            <p >With JFIX ecommerce, you can now enjoy peace mind of shopping without cash involved. it's a simple, fast and secure.</p>
+            Thank you!
+        `
+    }
+    transporter.sendMail(mailMessages, (err, info) => {
+        if (err) {
+            console.log(err);
+            res.send(`Error dey`)
+        }
+        else {
+            console.log(`Email sent successfully: ${info.response}`);
+            res.send(`Email sent successfully: ${info.response}`)
         }
     })
 }
 
-module.exports = { getLandingPage, signup, signin, home,getUser, getCart, cartProduct, removeCartItem, saveProfile, product }
+module.exports = { getLandingPage, signup, signin, home, getUser, getCart, cartProduct, removeCartItem, saveProfile, product, payment, sendEmail }

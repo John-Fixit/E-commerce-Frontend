@@ -70,9 +70,7 @@ function Navbar({thisuser}) {
                             </button>
                             <ul className="dropdown-menu text-light" aria-labelledby="navbarDropdown">
                                 <li><Link to="/homepage/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
-                                <li><Link to="" className="dropdown-item"><FaRegBookmark /> Saved</Link></li>
                                 <li><Link to="" className="dropdown-item"><BiCertification /> Settings</Link></li>
-                                <li><Link to="" className="dropdown-item"><MdAutorenew /> Switch account</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><button className="btn dropdown-item" onClick={logOut}>Log out</button></li>
                             </ul>

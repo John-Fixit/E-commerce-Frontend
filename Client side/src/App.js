@@ -5,7 +5,6 @@ import Signin from './Components/Signin'
 import Homepage from './Components/Homepage'
 import AdminPage from './Components/AdminPage'
 import AdminSignin from './Components/AdminSignin'
-import AdminHome from './Components/AdminHome'
 function App() {
 
   return (

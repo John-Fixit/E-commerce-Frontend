@@ -186,14 +186,14 @@ function Home() {
               <span className="visually-hidden">Loading...</span>
             </div> :
               <div className='col-12 products_row'>
-                <marquee behavior="infinite" direction="alternate" className=''>Purchase and Add your favourite product to your cart</marquee>
+                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Purchase and Add your favourite product to your cart</span></marquee>
 
                 <div className='row'>
                   {
                     products.map((eachProduct, index) => (
                       <div className='col-lg-3 col-md-6 mt-3 col-sm-12' key={index}>
                         <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
-                          <img src={eachProduct.image} className="card-img-top mx-auto w-50 h-50" alt="..." />
+                          <img src={eachProduct.image} className="card-img-top mx-auto" style={{width: '30vh', height: '35vh'}} alt="..." />
                           <div className="card-body">
                             <h6 className="card-title text-start">{eachProduct.title}</h6>
                             <div className='d-flex justify-content-between'>
@@ -215,7 +215,7 @@ function Home() {
                       otherProduct.map((eachProduct, index) => (
                         <div className='col-lg-3 col-md-6 mt-3' key={index}>
                           <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
-                            <img src={eachProduct.image} className="card-img-top mx-auto w-75 h-50" alt="..." />
+                            <img src={eachProduct.image} className="card-img-top mx-auto" alt="..." />
                             <div className="card-body">
                               <h6 className="card-title text-start">{eachProduct.title}</h6>
                               <div className='d-flex justify-content-between'>

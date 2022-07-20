@@ -3,25 +3,36 @@ const jwt = require('jsonwebtoken')
 const { userModel } = require("../Model/user.model")
 const cloudinary = require('cloudinary')
 require('dotenv').config()
+const nodemailer = require('nodemailer')
 const SECRET = process.env.JWT_SECRET
-
+const EMAIL = process.env.EMAIL
+const PASSWORD = process.env.PASSWORD
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,
     api_secret: process.env.API_SECRET
 });
 
+var transporter = nodemailer.createTransport({
+    service: 'smtp@gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+        user: EMAIL,
+        pass: PASSWORD
+    }
+})
 const signup = (req, res) => {
     const adminDetail = req.body
     const email = adminDetail.email
+    const fullname = adminDetail.firstname + ' ' + adminDetail.lastname
     adminModel.findOne({ 'email': email }, (err, foundUser) => {
         if (err) {
             res.status(500).send({ message: `Internal server error`, status: false })
-            console.log(`Internal server error`);
         } else {
             if (foundUser) {
                 res.send({ message: `This user already exist`, status: false })
-                console.log(`user akready exist`);
             } else {
                 const form = new adminModel(adminDetail)
                 form.save((err) => {
@@ -29,7 +40,35 @@ const signup = (req, res) => {
                         res.send({ message: `Network error user not yet registered`, status: false })
                     }
                     else {
-                        res.send({ message: `Registration successfull`, status: true })
+                        adminModel.findOne({ 'email': email }, (err, thisAdmin) => {
+                            if (err) {
+                                res.send({ message: `An error occurred`, status: false })
+                            }
+                            else {
+                                const privateKey = thisAdmin.privateKey
+                                var mailMessage = {
+                                    from: EMAIL,
+                                    to: email,
+                                    subject: 'Registration successfull!',
+                                    html: `<b class='card-title'>Dear ${fullname},</b>
+                                    <p >Welcome to JFIX e-commerce administrative site!</p>
+                                    <p >Congratulations! Your JFIX e-commerce admin. account has been successfully created.</p>
+                                    <p >With JFIX e-commerce site, you are to manage, protect and secure the site from unrelevant effect</p>
+                                    <b>This is your admin private key for your account: ${privateKey}</b>
+                                    <p>You a\can sign in through <a href='https://google.com'>link</a> to sign in to your admin account
+                                    Thank you!`
+                                }
+                                transporter.sendMail(mailMessage, (err, result) => {
+                                    if (err) {
+                                        res.send({ message: `Invalid email`, status: false })
+                                    }
+                                    else {
+                                        res.send({ message: `Registration successfull`, status: true })
+                                    }
+                                })
+                            }
+                        })
+
                     }
                 })
             }
@@ -43,7 +82,7 @@ const signin = (req, res) => {
     adminModel.findOne({ 'email': email }, (err, thisUser) => {
         if (err) {
             console.log(`Internal server error!`);
-            res.send({messsage: `Network error! please check your connection`, status: false})
+            res.send({ messsage: `Network error! please check your connection`, status: false })
         } else {
             if (!thisUser) {
                 res.send({ message: `No account of this details with us !!!`, status: false })
@@ -193,13 +232,13 @@ const profilePhoto = (req, res) => {
         }
     })
 }
-const deleteProduct=(req, res)=>{
+const deleteProduct = (req, res) => {
     const productId = req.body.productId
-    productModel.findOneAndDelete({'_id': productId}, (err, result)=>{
-        if(err){
-            res.send({message: `Network error! unable to delete Product`, status: false})
-        }else{
-            res.send({message: `Product deleted successfully`, status: true})
+    productModel.findOneAndDelete({ '_id': productId }, (err, result) => {
+        if (err) {
+            res.send({ message: `Network error! unable to delete Product`, status: false })
+        } else {
+            res.send({ message: `Product deleted successfully`, status: true })
         }
     })
 }
