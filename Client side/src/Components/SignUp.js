@@ -24,7 +24,7 @@ function SignUp() {
             password: '',
             profilePhoto: '',
             gender: '',
-            dateOfBirth: ''
+            dateOfBirth: '',
         },
         onSubmit: (values) => {
             const userDetails = values;
@@ -52,9 +52,11 @@ function SignUp() {
     return (
         <>
             <div className='container-fluid'>
-                <div className='col-lg-7 col-md-12 mx-auto my-5'>
+                <div className='col-lg-7 col-md-12 mx-auto my-4'>
                     <div className='form shadow'>
-                        <h1 className='card-header text-center text-light border-bottom-0 btnbg'>Sign up</h1>
+                        <div className='bgImg'>
+                            <h1 className='card-header text-center text-light border-bottom-0 btnbg '>Sign up</h1>
+                        </div>
                         <div className='p-3'>
                             {
                                 isLoading ? '' : status ? <div className='alert alert-success text-center'>{message}</div> : <div className='alert alert-danger text-center'>{message}</div>
@@ -110,13 +112,11 @@ function SignUp() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='row mt-3 mx-3'>
-                                    <div className='col-sm-6'>
-                                        <p className='text-muted'>Already have an account <Link to='/signin' className='text-decoration-none'>Sign in</Link></p>
-                                    </div>
-                                    <div className='col-sm-6'>
-                                        <p className='text-muted'>Already have an account <Link to='/signin' className='text-decoration-none'>Sign in</Link></p>
-                                    </div>
+                                <div className='col-12 ms-3 mt-3'>
+                                    <p className='text-muted'>By creating account, you have <Link to='' className='text-decoration-none'>agreed with the terms and condition of this site.</Link></p>
+                                </div>
+                                <div className='col-sm-12 ms-3 mt-3'>
+                                    <p className='text-muted'>Already have an account <Link to='/signin' className='text-decoration-none'>Sign in</Link></p>
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btnbg px-5 text-light' type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">

@@ -8,7 +8,10 @@ import user from '../Images/user.PNG'
 import style from './style.css'
 import axios from 'axios';
 function Navbar({thisuser}) {
-    const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    let userDetails = []
+    if(localStorage.userDetails){
+         userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    }
     const [firstname, setfirstname] = useState('')
     const [cartProduct, setcartProduct] = useState('')
     const [profilePhoto, setprofilePhoto] = useState('')
@@ -31,7 +34,7 @@ function Navbar({thisuser}) {
         if (window.confirm(`Are you sure to log out ?`)) {
             localStorage.removeItem('token')
             localStorage.removeItem('userDetails')
-            navigate('/signin')
+            navigate('/')
         }
     }
     return (

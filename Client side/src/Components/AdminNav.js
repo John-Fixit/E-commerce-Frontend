@@ -13,7 +13,7 @@ function AdminNav({ firstname, profilePhoto }) {
         if (window.confirm(`Are you sure to log out ?`)) {
             localStorage.removeItem('admintoken')
             localStorage.removeItem('adminInfo')
-            navigate('/admin_login')
+            navigate('/')
         }
     }
     return (
@@ -29,12 +29,6 @@ function AdminNav({ firstname, profilePhoto }) {
                             <li className="nav-item ms-3">
                                 <Link to='/admin/' className="nav-link active text-light ">Home</Link>
                             </li>
-                            {/* <li className="nav-item ms-3">
-                        <Link to='' className="nav-link active text-light">About us</Link>
-                    </li> */}
-                            {/* <li className="nav-item ms-3">
-                        <Link to='' className="nav-link active text-light">Add member</Link>
-                    </li> */}
                             <li className="nav-item ms-3">
                                 <Link to='/admin/customers' className="nav-link active text-light">Customer List</Link>
                             </li>

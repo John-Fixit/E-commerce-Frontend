@@ -66,7 +66,7 @@ function AdminPage() {
         <Routes>
             <Route path='/' element={<AdminHome customers={customers} staff={staff} products={products}/>}/>
             <Route path='/customers' element={<CustomerList customers={customers} staff={staff}/>}/>
-            <Route path='/addProduct' element={<UploadProducts />} />
+            <Route path='/addProduct' element={<UploadProducts adminDetail={adminDetail}/>} />
             <Route path='/signup' element={<Adminsignup />}/>
             <Route path='/profile' element={<AdminProfile adminDetail={adminDetail}/>} />
         </Routes>

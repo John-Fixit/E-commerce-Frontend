@@ -54,8 +54,8 @@ const signup = (req, res) => {
                                     <p >Welcome to JFIX e-commerce administrative site!</p>
                                     <p >Congratulations! Your JFIX e-commerce admin. account has been successfully created.</p>
                                     <p >With JFIX e-commerce site, you are to manage, protect and secure the site from unrelevant effect</p>
-                                    <b>This is your admin private key for your account: ${privateKey}</b>
-                                    <p>You a\can sign in through <a href='https://google.com'>link</a> to sign in to your admin account
+                                    <b>This is your admin private key for your account: ${privateKey}, <i>DO NOT SHARE THIS WITH ANYONE</i></b>
+                                    <p>Sign in through <a href='https://google.com/admin_login'>link</a> to your admin account
                                     Thank you!`
                                 }
                                 transporter.sendMail(mailMessage, (err, result) => {
@@ -63,7 +63,7 @@ const signup = (req, res) => {
                                         res.send({ message: `Invalid email`, status: false })
                                     }
                                     else {
-                                        res.send({ message: `Registration successfull`, status: true })
+                                        res.send({ message: `Registration successfull, Please login to your gmail account ${email} for your private admin key.`, status: true })
                                     }
                                 })
                             }
@@ -85,7 +85,7 @@ const signin = (req, res) => {
             res.send({ messsage: `Network error! please check your connection`, status: false })
         } else {
             if (!thisUser) {
-                res.send({ message: `No account of this details with us !!!`, status: false })
+                res.send({ message: `No account of this details with me !!!`, status: false })
             }
             else {
                 thisUser.validatePassword(password, (err, result) => {
@@ -180,7 +180,8 @@ const products = (req, res) => {
     const rating = req.body.rate
     const price = req.body.price
     const productImage = req.body.convertedFile
-
+    const fullname = req.body.fullname
+    const email = req.body.email
     cloudinary.v2.uploader.upload(productImage, (err, result) => {
         if (err) {
             res.send({ message: `Network problem, unable to upload` })
@@ -193,6 +194,50 @@ const products = (req, res) => {
                     res.send({ message: `Internal server error`, status: false })
                 }
                 else {
+                    var uploaderMessage = {
+                        from: EMAIL,
+                        to: email,
+                        subject: 'Uploading Successfull',
+                        html: `<b>Dear ${fullname},</b>
+                        <p>Upload of ${title} product was successfull.</p>`
+                    }
+                    transporter.sendMail(uploaderMessage, (err, info) => {
+                        if (err) {
+                            res.send({ message: `Error occur in the sneding of email, due to invalid email.`, status: false })
+                        }
+                        {
+                            res.send({ message: `Email sent: ${info.response}`, status: true })
+                        }
+                    })
+                    adminModel.find((err, allAdmin) => {
+                        if (err) {
+                            res.send({ message: `Error occur`, status: false })
+                        }
+                        else {
+                            console.log(allAdmin);
+                            let filtrateAdmin = allAdmin.filter((fAdmin, index) => (
+                                email != fAdmin.email
+                            ))
+                            filtrateAdmin.map((eachAdmin) => {
+                                var adminFullname = eachAdmin.firstname + ' ' + eachAdmin.lastname
+                                var adminMessage = {
+                                    from: EMAIL,
+                                    to: eachAdmin.email,
+                                    subject: 'New Product Added',
+                                    html: `<b>Dear ${adminFullname},</b>
+                                    <p>New Product (<b>${title}</b>) was added to JFIX e-commerce site by ${fullname}</p>`
+                                }
+                                transporter.sendMail(adminMessage, (err, info)=>{
+                                    if(err){
+                                      res.send({message: `Error occur`, status: false})
+                                    }
+                                    else{
+                                        res.send({message: `Email sent, Reference: ${info.response}`, status: true})
+                                    }
+                                })
+                            })
+                        }
+                    })
                     res.send({ message: `Product uploaded successfully`, status: true, })
                 }
             })
@@ -242,4 +287,15 @@ const deleteProduct = (req, res) => {
         }
     })
 }
-module.exports = { signup, signin, authorizeUser, customer, products, deleteCustomer, deleteStaff, saveProfile, profilePhoto, deleteProduct }
+const deleteAccount=(req, res)=>{
+    const adminId = req.body.adminId
+    adminModel.deleteOne({'_id': adminId}, (err, result)=>{
+        if(err){
+            res.send({message: `Network error, user not deleted`, status: false})
+        }
+        else{
+            res.send({message: `Account deleted successfully`, status: true})
+        }
+    })
+}
+module.exports = { signup, signin, authorizeUser, customer, products, deleteCustomer, deleteStaff, saveProfile, profilePhoto, deleteProduct, deleteAccount }

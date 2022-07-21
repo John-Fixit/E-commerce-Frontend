@@ -10,12 +10,8 @@ import { FaCartPlus } from 'react-icons/fa'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
-function Home() {
-  useEffect(() => {
-    getHome()
-    AOS.init()
-    AOS.refresh()
-  }, [])
+function Home({allProducts}) {
+  
   const navigate = useNavigate()
   const [products, setproducts] = useState([])
   const [otherProduct, setotherProduct] = useState([])
@@ -28,40 +24,46 @@ function Home() {
   const [isLoading, setisLoading] = useState(true)
   const [productTittle, setproductTittle] = useState('')
   const [productPrice, setproductPrice] = useState('')
-  const getHome = () => {
-    const token = JSON.parse(localStorage.getItem('token'))
-    axios.get(HOMEURI, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      }
-    })
-      .then((res) => {
-        if (res.data.status) {
-          const responseFromServer = res.data
-          const userDetails = responseFromServer.userDetails
-          setuserId(userDetails._id)
-          localStorage.setItem('userDetails', JSON.stringify(userDetails))
-
-          axios.get('https://fakestoreapi.com/products').then((res) => {
-            const responseFromAPI = res.data
-            setproducts(() => {
-              setisLoading(false)
-              return responseFromAPI
-            })
-          })
-          axios.get(productURI).then((res) => {
-            setotherProduct(() => { return res.data.result })
-          })
-        }
-        else {
-          localStorage.removeItem('token')
-          localStorage.removeItem('userDetails')
-          navigate('/signin')
-        }
+  useEffect(() => {
+    console.log(allProducts);
+    // getHome()
+    axios.get('https://fakestoreapi.com/products').then((res) => {
+      const responseFromAPI = res.data
+      setproducts(() => {
+        setisLoading(false)
+        return responseFromAPI
       })
-  }
+    })
+    AOS.init()
+    AOS.refresh()
+  }, [])
+  // const getHome = () => {
+  //   const token = JSON.parse(localStorage.getItem('token'))
+  //   axios.get(HOMEURI, {
+  //     headers: {
+  //       'Authorization': `Bearer ${token}`,
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json'
+  //     }
+  //   })
+  //     .then((res) => {
+  //       if (res.data.status) {
+  //         const responseFromServer = res.data
+  //         const userDetails = responseFromServer.userDetails
+  //         setuserId(userDetails._id)
+  //         localStorage.setItem('userDetails', JSON.stringify(userDetails))
+
+  //         axios.get(productURI).then((res) => {
+  //           setotherProduct(() => { return res.data.result })
+  //         })
+  //       }
+  //       else {
+  //         localStorage.removeItem('token')
+  //         localStorage.removeItem('userDetails')
+  //         navigate('/signin')
+  //       }
+  //     })
+  // }
   const modalOut = (productDetail) => {
     console.log(productDetail);
     setindex(() => { return productDetail.index })
@@ -186,14 +188,14 @@ function Home() {
               <span className="visually-hidden">Loading...</span>
             </div> :
               <div className='col-12 products_row'>
-                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Purchase and Add your favourite product to your cart</span></marquee>
+                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, Purchase and enjoy our product by adding favourite product to your cart.</span></marquee>
 
                 <div className='row'>
                   {
                     products.map((eachProduct, index) => (
                       <div className='col-lg-3 col-md-6 mt-3 col-sm-12' key={index}>
                         <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
-                          <img src={eachProduct.image} className="card-img-top mx-auto" style={{width: '30vh', height: '35vh'}} alt="..." />
+                          <img src={eachProduct.image} className="card-img-top mx-auto w-75" alt="..." />
                           <div className="card-body">
                             <h6 className="card-title text-start">{eachProduct.title}</h6>
                             <div className='d-flex justify-content-between'>
@@ -212,7 +214,10 @@ function Home() {
                   }
                   <div className='row'>
                     {
-                      otherProduct.map((eachProduct, index) => (
+                      allProducts.length < 1 ? <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div> : 
+                      allProducts.map((eachProduct, index) => (
                         <div className='col-lg-3 col-md-6 mt-3' key={index}>
                           <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
                             <img src={eachProduct.image} className="card-img-top mx-auto" alt="..." />
@@ -233,7 +238,7 @@ function Home() {
                       ))
                     }
                   </div>
-                  <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                       <div className="modal-content">
                         <div className="modal-header">
@@ -257,7 +262,6 @@ function Home() {
                         </div>
                         <div className="modal-footer btn-group shadow">
                           <button type="button" className="btn textColor" onClick={() => contShopping({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>Continue Shopping</button>
-
                           <button className='btn btnbg text-light' onClick={() => addToCart({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId, productVariation })}>View Cart and Checkout</button>
                         </div>
                       </div>
@@ -267,6 +271,7 @@ function Home() {
               </div>
           }
         </div>
+        <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, we are the best of the best</span></marquee>
       </div>
     </>
   )

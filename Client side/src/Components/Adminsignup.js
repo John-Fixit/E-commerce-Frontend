@@ -43,8 +43,11 @@ function Adminsignup() {
     <>
       <div className='container cont_fluid'>
         <div className='row'>
-          <div className='col-6 bgs'>
-
+        <div className='col-6 bgs text-center pt-5'>
+            <div className='mt-5'>
+              <h1 className='text-light'>STAFF SIGN UP PAGE</h1>
+              <p className='text-light'>Create account for another staff</p>
+            </div>
           </div>
           <div className='col-6'>
             <div className='form'>

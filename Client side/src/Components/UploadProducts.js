@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './style.css'
 import img3 from '../Images/bgImg3.jpg'
 import axios from 'axios'
 
-function UploadProducts() {
+function UploadProducts({adminDetail}) {
   const [title, settitle] = useState('')
   const [price, setprice] = useState('')
   const [rate, setrate] = useState('')
@@ -13,6 +13,9 @@ function UploadProducts() {
   const [status, setstatus] = useState(false)
   const [num, setnum] = useState(0)
   const newProductURI = 'http://localhost:4000/admin/products'
+  // useEffect(()=>{
+  //     console.log( adminDetail.email);
+  // },[])
   const selectProduct = (e) => {
     const selectedProduct = e.target.files[0]
     const reader = new FileReader()
@@ -22,7 +25,9 @@ function UploadProducts() {
     }
   }
   const uploadProduct = () => {
-    const productInfo = { convertedFile, title, price, rate }
+    const fullname = adminDetail.firstname + ' ' + adminDetail.lastname
+    const email = adminDetail.email
+    const productInfo = {fullname, email, convertedFile, title, price, rate }
     axios.post(newProductURI, productInfo).then((res) => {
       setisLoading(false)
       if(res.data.status){

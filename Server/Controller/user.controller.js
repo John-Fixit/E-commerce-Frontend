@@ -59,7 +59,7 @@ const signup = (req, res) => {
                         transporter.sendMail(mailMessage, (err, info) => {
                             if (err) {
                                 console.log(err);
-                                res.send({message: `Email invalid`, status: false})
+                                res.send({message: `Connection error!`, status: false})
                             }
                             else {
                                 console.log(info.response);
@@ -131,6 +131,7 @@ const getUser = (req, res) => {
     })
 }
 const getCart = (req, res) => {
+    console.log(req.body);
     const userId = req.body.userId
     userModel.findOne({ "_id": userId }, (err, user) => {
         if (err) {
@@ -141,6 +142,7 @@ const getCart = (req, res) => {
             user.cartProduct.map((eachProduct) => {
                 totalPrice += parseInt(eachProduct.productPrice)
             })
+            console.log(user);
             res.send({ message: `Cart products`, user, products: user.cartProduct, status: true, totalPrice })
         }
     })
@@ -188,7 +190,6 @@ const removeCartItem = (req, res) => {
 
 const saveProfile = (req, res) => {
     const userDetails = req.body
-    const profilePhoto = userDetails.profilePhoto
     const userId = req.body.userId
     const userEmail = req.body.email
     const firstname = req.body.firstname
@@ -199,12 +200,30 @@ const saveProfile = (req, res) => {
             console.log(`Unable to upload, due to internal server error`);
         } else {
             const uploadedPhoto = result.secure_url
-            userModel.findOneAndUpdate({ 'email': userEmail }, { $set: { 'profilePhoto': uploadedPhoto, 'firstname': firstname, 'lastname': lastname, 'contact': contact } }, (err, result) => {
+            userModel.findOneAndUpdate({ '_id': userId }, { $set: {'firstname': firstname, 'lastname': lastname, 'email': userEmail, 'contact': contact } }, (err, result) => {
                 if (err) {
                     console.log(err);
                     console.log(`error dey`);
                 } else {
                     console.log(result);
+                }
+            })
+        }
+    })
+}
+const saveProfilePhoto=(req, res)=>{
+    const profilePhoto = req.body.profilePhoto
+    const userId = req.body.userId
+    cloudinary.v2.uploader.upload(profilePhoto, (err, result) => {
+        if (err) {
+            console.log(`Unable to upload, due to internal server error`);
+        } else {
+            const uploadedPhoto = result.secure_url
+            userModel.findOneAndUpdate({ '_id': userId }, {'profilePhoto': uploadedPhoto }, (err, result) => {
+                if (err) {
+                    res.send({ message: `Internal server error`, status: false })
+                } else {
+                    res.send({ message: `Profile photo uploaded successfully`, status: true })
                 }
             })
         }
@@ -244,9 +263,17 @@ const payment = (req, res) => {
                 transporter.sendMail(mailMessages, (err, info)=>{
                     if(err){
                         console.log(err);
-                        res.send({message:`Error occur in the transaction`, status: false})
+                        res.send({message:`Network error occur in the transaction`, status: false})
                     }else{
-                        res.send({message:` transaction successfull`, status: true})
+                        user.cartProduct = [];
+                        userModel.updateOne({'_id': userId}, {'cartProduct': user.cartProduct}, (err, result)=>{
+                            if(err){
+                                res.send({message: `Network error`, status: false})
+                            }
+                            else{
+                                res.send({message:` transaction successfull`, status: true})
+                            }
+                        })
                     }
                 })
             }
@@ -293,5 +320,15 @@ const sendEmail = (req, res) => {
         }
     })
 }
-
-module.exports = { getLandingPage, signup, signin, home, getUser, getCart, cartProduct, removeCartItem, saveProfile, product, payment, sendEmail }
+const deleteAccount=(req, res)=>{
+    const userEmail = req.body.email
+    userModel.deleteOne({'email': userEmail}, (err, result)=>{
+        if(err){
+            res.send({message: `Network error, user not deleted`, status: false})
+        }
+        else{
+            res.send({message: `Account deleted successfully`, status: true})
+        }
+    })
+}
+module.exports = { getLandingPage, signup, signin, home, getUser, getCart, cartProduct, removeCartItem, saveProfile, saveProfilePhoto, product, payment, sendEmail, deleteAccount }

@@ -6,23 +6,21 @@ import img1 from '../Images/business.png'
 import img2 from '../Images/printing.png'
 import img4 from '../Images/sticker.png'
 import img5 from '../Images/christmas.png'
+import img7 from '../Images/1473159158_Christmas-card-for-this-wonderful-season.png'
 import { FaCartPlus, FaProductHunt, FaTrash, FaTrashAlt, FaUserAlt, FaUserAstronaut } from 'react-icons/fa'
 function AdminHome({ customers, staff, products }) {
   const deleteProductURI = 'http://localhost:4000/admin/deleteProduct'
   const [message, setmessage] = useState('')
   const [status, setstatus] = useState(true)
-  const [productName, setproductName] = useState('')
   const [productToDelete, setproductToDelete] = useState('')
   const [productId, setproductId] = useState('')
   const [isComing, setisComing] = useState(true)
-  const [isLoading, setisLoading] = useState(true)
 
   const modalOut = (productDetail) => {
     setproductToDelete(() => { return productDetail.productTitle })
     setproductId(productDetail.productId)
   }
   const handleOnChange = (e) => {
-    setproductName(() => { return e.target.value })
     if (productToDelete == e.target.value) {
       setisComing(false)
     }
@@ -32,7 +30,6 @@ function AdminHome({ customers, staff, products }) {
   }
   const deleteProduct = () => {
       axios.post(deleteProductURI, { productId }).then((res) => {
-        setisLoading(false)
         if (res.data.status) {
           window.location.reload()
         } else {
@@ -68,7 +65,7 @@ function AdminHome({ customers, staff, products }) {
                 <img src={img5} className="d-block " width='25%' alt="..." />
                 <img src={img1} className="d-block " width='25%' alt="..." />
                 <img src={img2} className="d-block " width='25%' alt="..." />
-                <img src={img2} className="d-block " width='25%' alt="..." />
+                <img src={img7} className="d-block " width='25%' alt="..." />
               </div>
               <div className="carousel-caption d-none d-md-block">
                 <h5></h5>
@@ -78,7 +75,7 @@ function AdminHome({ customers, staff, products }) {
             <div className="carousel-item">
               <div className='d-flex'>
                 <img src={img4} className="d-block" width='25%' alt="..." />
-                <img src={img5} className="d-block" width='25%' alt="..." />
+                <img src={img7} className="d-block" width='25%' alt="..." />
                 <img src={img1} className="d-block" width='25%' alt="..." />
                 <img src={img2} className="d-block" width='25%' alt="..." />
               </div>

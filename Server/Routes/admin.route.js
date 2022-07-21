@@ -11,4 +11,5 @@ adminRouter.post('/deleteStaff', adminController.deleteStaff)
 adminRouter.post('/deleteProduct', adminController.deleteProduct)
 adminRouter.post('/save', adminController.saveProfile)
 adminRouter.post('/uploadProfilePhoto', adminController.profilePhoto)
+adminRouter.post('/deleteAccount', adminController.deleteAccount)
 module.exports = adminRouter

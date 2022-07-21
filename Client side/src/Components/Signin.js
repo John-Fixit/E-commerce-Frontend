@@ -47,7 +47,9 @@ function Signin() {
             <div className='container-fluid'>
                 <div className='col-lg-7 col-md-12 mx-auto my-5'>
                     <div className='form shadow'>
-                        <h1 className='card-header text-center text-light border-bottom-0 btnbg'>Sign in</h1>
+                        <div className='bgImg'>
+                            <h1 className='card-header text-center text-light border-bottom-0 btnbg'>Sign in</h1>
+                        </div>
                         <div className='p-3'>
 
                             <form action='' onSubmit={formik.handleSubmit}>
@@ -74,12 +76,12 @@ function Signin() {
                                     }
                                 </div>
                                 <div className='row'>
-                                <div className='col-sm-6 mt-3'>
-                                    <p className='text-muted'>Don't have an account <Link to='/signup' className='text-decoration-none'>Sign up</Link></p>
-                                </div>
-                                <div className='col-sm-6 mt-3 text-end'>
-                                    <p className='text-muted'>Login as an admin <Link to='/admin_login' className='text-decoration-none'>Sign in</Link></p>
-                                </div>
+                                    <div className='col-sm-6 mt-3'>
+                                        <p className='text-muted'>Don't have an account <Link to='/signup' className='text-decoration-none'>Sign up</Link></p>
+                                    </div>
+                                    <div className='col-sm-6 mt-3 text-end'>
+                                        <p className='text-muted'>Login as an admin <Link to='/admin_login' className='text-decoration-none'>Sign in</Link></p>
+                                    </div>
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btnbg px-5 text-light py-2' type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">

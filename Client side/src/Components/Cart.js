@@ -5,9 +5,11 @@ import img from '../Images/bgImg2.jpg'
 import style from './style.css'
 import { useNavigate } from 'react-router-dom'
 import PaystackPop from '@paystack/inline-js'
-function Cart() {
+function Cart({thisuser}) {
     const navigate = useNavigate()
     useEffect(() => {
+        console.log(thisuser);
+        // setuserId(thisuser._id)
         getCart()
     }, [])
     const REMOVEURI = 'http://localhost:4000/user/removeCartItem'
@@ -17,18 +19,24 @@ function Cart() {
     const [checkOutAmount, setcheckOutAmount] = useState('')
     const [productVariation, setproductVariation] = useState(1)
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
+    const [isGoing, setisGoing] = useState(false)
+    // const [userId, setuserId] = useState('')
     const [email, setemail] = useState('')
     const [contact, setcontact] = useState('')
     const [username, setusername] = useState('')
+    const [message, setmessage] = useState('')
+    const [status, setstatus] = useState(false)
     const userId = userDetails._id
     const getCart = () => {
-        axios.post(CARTURI, { userId }).then((res) => {
-            setemail(() => { return res.data.user.email })
-            setcontact(() => { return res.data.user.contact })
-            setusername(() => { return res.data.user.username })
-            setproduct(() => { return res.data.products })
-            setcheckOutAmount(() => { return res.data.totalPrice })
-        })
+        if(userId !=''){
+            axios.post(CARTURI, { userId }).then((res) => {
+                setemail(() => { return res.data.user.email })
+                setcontact(() => { return res.data.user.contact })
+                setusername(() => { return res.data.user.username })
+                setproduct(() => { return res.data.products })
+                setcheckOutAmount(() => { return res.data.totalPrice })
+            })
+        }
     }
     const increament = (index) => {
         // let kk = product[index].productVariation +1;
@@ -49,19 +57,31 @@ function Cart() {
         })
     }
     const payCheckOutAmount = (amountToPay) => {
+        setisGoing(true)
         const paystack = new PaystackPop()
         paystack.newTransaction({
             key: 'pk_test_8e0adf1d74b3595f09d84c9b4ec645477eeb20fd',
             amount: amountToPay * 100,
             email,
             contact,
-            onSuccess:(transaction)=>{
-                const paymentDetail = {userId, username, amountToPay, email, paymentReference : transaction.reference}
-                axios.post(paymentURI, paymentDetail)
-                alert(`Payment was successfull! Reference ${transaction.reference}`)
+            onSuccess: (transaction) => {
+                const paymentDetail = { userId, username, amountToPay, email, paymentReference: transaction.reference }
+                axios.post(paymentURI, paymentDetail).then((res) => {
+                    setisGoing(false)
+                    const paymentResult = res.data
+                    if (paymentResult.status) {
+                        alert(`Payment was successfull! Reference ${transaction.reference}`)
+                        window.location.reload()
+                    }
+                    else {
+                        setmessage(paymentResult.message)
+                        setstatus(paymentResult.status)
+                    }
+                })
             },
-            oncancel:()=>{
-                console.log(`You unexpectedly close the payment log!`)
+            onCancel: () => {
+                setisGoing(false)
+                alert(`You want to close the payment log!`)
             }
         })
     }
@@ -73,31 +93,32 @@ function Cart() {
                         <div className='card h-100 shadow py-2 border-0 pt-4 px-2'>
                             <h5 className='card-header bg-white'>Cart ({product.length})</h5>
                             {
-                                product.map((eachProduct, index) => (
-                                    <div className='card-body' key={index}>
-                                        <div className='row  '>
-                                            <div className='col-sm-9 d-flex'>
-                                                <img src={eachProduct.productImage} className="card-img-top" alt="..." style={{ width: '10vh' }} />
-                                                <div className='ms-3 mt-1' >
-                                                    <p className='card-text'>{eachProduct.productTitle}</p>
-                                                    <p className='text-muted'>Size : product size</p>
+                                product.length < 1 ? <h3 className='text-muted ms-3'>No product in cart yet</h3> :
+                                    product.map((eachProduct, index) => (
+                                        <div className='card-body' key={index}>
+                                            <div className='row  '>
+                                                <div className='col-sm-9 d-flex'>
+                                                    <img src={eachProduct.productImage} className="card-img-top" alt="..." style={{ width: '10vh' }} />
+                                                    <div className='ms-3 mt-1' >
+                                                        <p className='card-text'>{eachProduct.productTitle}</p>
+                                                        <p className='text-muted'>Size : product size</p>
+                                                    </div>
+                                                </div>
+                                                <div className='col-sm-3 text-end'>
+                                                    <h4>Price ₦ {eachProduct.productPrice}</h4>
                                                 </div>
                                             </div>
-                                            <div className='col-sm-3 text-end'>
-                                                <h4>Price ₦ {eachProduct.productPrice}</h4>
+                                            <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
+                                                <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}><FaTrash /> Remove</button>
+                                                <div className='row'>
+                                                    {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
+                                                    <p className='col-12'>{eachProduct.productVariation} product</p>
+                                                    {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button> */}
+                                                </div>
                                             </div>
+                                            <hr />
                                         </div>
-                                        <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
-                                            <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}><FaTrash /> Remove</button>
-                                            <div className='row'>
-                                                {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
-                                                <p className='col-12'>{eachProduct.productVariation} product</p>
-                                                {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button> */}
-                                            </div>
-                                        </div>
-                                        <hr />
-                                    </div>
-                                ))
+                                    ))
                             }
                         </div>
                     </div>
@@ -106,17 +127,15 @@ function Cart() {
                             <h5 className='card-header ps-2 bg-white'>Cart Summary</h5>
                             <div className='card-body px-2 py-0 pt-2 border-bottom d-flex justify-content-between'>
                                 <p>Sub-Total</p>
-                                <h5>₦ {checkOutAmount}</h5>
+                                <h5>₦ {checkOutAmount}</h5>CHECKOUT ({checkOutAmount})
                             </div>
-                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>CHECKOUT ({checkOutAmount})</button>
+                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div> : `CHECKOUT (${checkOutAmount})`}</button>
                         </div>
                     </div>
                 </div>
-                <div className='col-12 mt-2'>
-                    <div className='card shadow'>
 
-                    </div>
-                </div>
             </div>
         </>
     )
