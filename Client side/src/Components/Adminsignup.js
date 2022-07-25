@@ -6,10 +6,11 @@ import axios from 'axios'
 function Adminsignup() {
   const passRegex = /^[\w]{6,}$/
   const contactRegex = /^[0][\d]{10}$/
-  const signupURI = 'http://localhost:4000/admin/signup'
+  const signupURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/signup'
   const [isLoading, setisLoading] = useState(true)
   const [message, setmessage] = useState('')
   const [status, setstatus] = useState(false)
+  const [isGoing, setisGoing] = useState(false)
   const formik = useFormik({
     initialValues: {
       firstname: '',
@@ -19,11 +20,13 @@ function Adminsignup() {
       gender: '',
       profilePhoto: '',
       username: '',
-      password: '',
+      password: 'please select',
       privateKey: ''
     },
     onSubmit: (values) => {
+      setisGoing(true)
       axios.post(signupURI, values).then((res)=>{
+        setisGoing(false)
         setisLoading(false)
         setmessage(res.data.message)
         if(res.data.status){
@@ -122,7 +125,9 @@ function Adminsignup() {
                   }
                 </div>
                 <div className='button mt-2'>
-                  <button className="btn bgs text-center w-100 text-white fs-5" type='submit'>Create account</button>
+                  <button className="btn bgs text-center w-100 text-white fs-5" type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div> : 'Create account'}</button>
                 </div>
               </form>
             </div>

@@ -9,7 +9,7 @@ import img5 from '../Images/christmas.png'
 import img7 from '../Images/1473159158_Christmas-card-for-this-wonderful-season.png'
 import { FaCartPlus, FaProductHunt, FaTrash, FaTrashAlt, FaUserAlt, FaUserAstronaut } from 'react-icons/fa'
 function AdminHome({ customers, staff, products }) {
-  const deleteProductURI = 'http://localhost:4000/admin/deleteProduct'
+  const deleteProductURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteProduct'
   const [message, setmessage] = useState('')
   const [status, setstatus] = useState(true)
   const [productToDelete, setproductToDelete] = useState('')
@@ -123,9 +123,9 @@ function AdminHome({ customers, staff, products }) {
           </div>
         </div>
         {
-          products.length < 1 ? <div className="spinner-border text-primary" role="status">
+          products.length < 1 ?<div className='text-center'> <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
-          </div> :
+          </div></div> :
             <div className='col-sm-12 products_row'>
               <p className='card-header text-center text-muted fs-4'>All Products Available</p>
               <marquee behavior="infinite" direction="alternate" className='btnbg text-light macque'>This are the products available in our store</marquee>
@@ -165,7 +165,7 @@ function AdminHome({ customers, staff, products }) {
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" className={isComing ? "btn btnbg disabled text-light" : "btn btnbg  text-light"} onClick={deleteProduct}>Delete Product</button>
+                    <button type="button" className={isComing ? "btn btnbg disabled text-light" : "btn btnbg  text-light"} data-bs-dismiss="modal" onClick={deleteProduct}>Delete Product</button>
                   </div>
                 </div>
               </div>

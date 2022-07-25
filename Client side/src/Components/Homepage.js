@@ -8,16 +8,15 @@ import Cart from './Cart'
 import axios from 'axios'
 function Homepage() {
   const [thisuser, setthisuser] = useState('')
-  // const userDetails = JSON.parse(localStorage.getItem('userDetails'))
   const navigate = useNavigate()
   const [allProducts, setallProducts] = useState([])
   const [otherProduct, setotherProduct] = useState([])
-  const HOMEURI = 'http://localhost:4000/user/home'
-  const productURI = 'http://localhost:4000/user/products'
+  const HOMEURI = 'https://jfix-e-commerce-site.herokuapp.com/user/home'
+  const productURI = 'https://jfix-e-commerce-site.herokuapp.com/user/products'
   const [userId, setuserId] = useState('')
   const [isLoading, setisLoading] = useState(true)
 
-  const GETUSERURI = 'http://localhost:4000/user/thisuser'
+  const GETUSERURI = 'https://jfix-e-commerce-site.herokuapp.com/user/thisuser'
   useEffect(()=>{
     getHome()
   }, [])
@@ -58,7 +57,7 @@ function Homepage() {
     <>
       <Navbar thisuser={thisuser}  />
       <Routes>
-        <Route path='/' element={<Home allProducts={allProducts}/>} />
+        <Route path='/' element={<Home allProducts={allProducts} thisuser={thisuser}/>} />
         <Route path='/profile' element={<Profile thisuser={thisuser}/>}/>
         <Route path='/cart' element={<Cart thisuser={thisuser}/>}/>
       </Routes>

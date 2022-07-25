@@ -102,6 +102,9 @@
                     background-position: center;
                     background-size: cover;
                 }
+                .spinner-border{
+                    color: #FF5722;
+                }
                 @keyframes landingpageImg {
                     0%{
                         background-image: url(../Images/bgImg5.png);

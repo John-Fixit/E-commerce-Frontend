@@ -34,7 +34,7 @@ function Navbar({thisuser}) {
         if (window.confirm(`Are you sure to log out ?`)) {
             localStorage.removeItem('token')
             localStorage.removeItem('userDetails')
-            navigate('/')
+            navigate('/signin')
         }
     }
     return (

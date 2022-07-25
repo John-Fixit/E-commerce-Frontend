@@ -5,16 +5,15 @@ import { FaCartArrowDown, FaRegBookmark, FaRegHeart, FaRegUser, FaRegUserCircle,
 import { Link, useNavigate } from 'react-router-dom'
 import style from './style.css'
 function AdminProfile({ adminDetail }) {
-    const profileURI = 'http://localhost:4000/admin/save'
-    const PROFILEPHOTOURI = 'http://localhost:4000/admin/uploadProfilePhoto'
-    const deleteAccURI = 'http://localhost:4000/admin/deleteAccount'
+    const profileURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/save'
+    const PROFILEPHOTOURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/uploadProfilePhoto'
+    const deleteAccURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteAccount'
     const [firstname, setfirstname] = useState('')
     const [lastname, setlastname] = useState('')
     const [email, setemail] = useState('')
     const [contact, setcontact] = useState('')
     const [username, setusername] = useState('')
     const [gender, setgender] = useState('')
-    const [DOB, setDOB] = useState('')
     const [disable, setdisable] = useState(true)
     const [dispp, setdispp] = useState(true)
     const [profilePhoto, setprofilePhoto] = useState('')
@@ -25,6 +24,10 @@ function AdminProfile({ adminDetail }) {
     const [isLoading, setisLoading] = useState(true)
     const [admin, setadmin] = useState('')
     const [isGoing, setisGoing] = useState(false)
+    const [isSaving, setisSaving] = useState(false)
+    const [isSavingPicture, setisSavingPicture] = useState(false)
+    const [disBtn, setdisBtn] = useState(true)
+    const [understand, setunderstand] = useState(false)
     const navigate = useNavigate()
     useEffect(() => {
         setfirstname(adminDetail.firstname)
@@ -33,7 +36,12 @@ function AdminProfile({ adminDetail }) {
         setcontact(adminDetail.contact)
         setusername(adminDetail.username)
         setadminId(adminDetail._id)
+        setgender(adminDetail.gender)
     }, [])
+    const options = [gender, 'male', 'female']
+    const handleChange = (e) => {
+            setgender(e.target.value)
+    }
     const editProfile = () => {
         setdisable(false)
     }
@@ -46,8 +54,9 @@ function AdminProfile({ adminDetail }) {
         }
     }
     const savePhoto = () => {
+        setisSavingPicture(true)
         axios.post(PROFILEPHOTOURI, { convertedFile, adminId }).then((res) => {
-            console.log(res.data);
+            setisSavingPicture(false)
             setisLoading(false)
             if (res.data.status) {
                 window.location.reload()
@@ -59,8 +68,10 @@ function AdminProfile({ adminDetail }) {
     }
 
     const saveProfile = () => {
+        setisSaving(true)
         const thisAdmin = { adminId, firstname, lastname, email, contact, username }
         axios.post(profileURI, thisAdmin).then((res) => {
+            setisSaving(false)
             setisLoading(false)
             if (res.data.status) {
                 window.location.reload()
@@ -71,8 +82,9 @@ function AdminProfile({ adminDetail }) {
             }
         })
     }
-    const closeModal=()=>{
+    const closeModal = () => {
         setisGoing(false)
+        setunderstand(false)
     }
     const deleteAccount = () => {
         setisGoing(true)
@@ -82,11 +94,15 @@ function AdminProfile({ adminDetail }) {
                 navigate('/admin_login')
             }
             else {
-                console.log(res.data.message);
+                alert(res.send.message)
             }
         })
     }
 
+    const tama = () => {
+        setdisBtn(false)
+        setunderstand(true)
+    }
     return (
         <>
             <div className='container-fluid cont_fluid bg-light pt-2'>
@@ -99,9 +115,9 @@ function AdminProfile({ adminDetail }) {
                                 <Link to='/admin/customers' className='text-decoration-none text-dark'><FaUserFriends size='4vh' /> Customer List</Link>
                                 <Link to='/admin/addProduct' className='text-decoration-none text-dark mt-3'><FaCartArrowDown size='4vh' /> Add New Product</Link>
                                 <Link to='/admin/signup' className='text-decoration-none text-dark mt-3'><FaRegBookmark size='4vh' /> Add New Staff</Link>
-                                <button className='btn mt-3 btn-outline-danger' data-bs-toggle="modal" data-bs-target="#exampleModal" data-backdrop="false">Delete account</button>
+                                <button className='rounded col-9 mt-3 btn-outline-danger' data-bs-toggle="modal" data-bs-target="#exampleModal" data-backdrop="false">Delete account</button>
 
-                                <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                                <div className="modal fade" id="exampleModal" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div className="modal-dialog modal-dialog-centered">
                                         <div className="modal-content">
                                             <div className="modal-header">
@@ -110,31 +126,35 @@ function AdminProfile({ adminDetail }) {
                                             <div className="modal-body">
                                                 <p className='text-danger'><b >Notice : </b>If you <b>proceed</b> this aspect, this account will be permanently deleted from JFIX e-commerce site. And all your data will be also be discarded here!</p>
                                             </div>
+                                            <div className='col-4 ms-3'>
+                                                <button className='btn btn-warning' onClick={tama} disabled={understand}>I understand you</button>
+                                            </div>
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeModal}>Close</button>
-                                                <button type="button" className="btn btnbg  text-light" onClick={deleteAccount}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
-                                                    <span class="visually-hidden">Proceed and Delete</span>
+                                                <button type="button" className="btn btnbg text-light" data-bs-dismiss="modal" disabled={disBtn} onClick={deleteAccount}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
+                                                    <span className="visually-hidden">Proceed and Delete</span>
                                                 </div> : 'Proceed and Delete'}</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div className='col-lg-9 shadow-sm py-5'>
-                                <div className='row col-sm-12'>
-                                    <div className='col-sm-8'>
-                                        <label htmlFor='' >Upload profile photo(optional)</label>
-                                        {isLoading ? '' :
-                                            status ? '' : <p className={!disable ? 'alert alert-danger p-0 text-center d-none' : 'alert alert-danger p-0 text-center'}>{message}</p>
-                                        }
-                                        <input type='file' className='form-control border-0 border-bottom border-dark' placeholder='Upload' onChange={(e) => selectPhoto(e)} />
-                                    </div>
-                                    <div className='col-sm-4'>
-                                        <button className='btn btnbg w-100 text-light py-3' onClick={savePhoto} disabled={dispp}>Save Profile Picture</button>
-                                    </div>
+                            <div className='row col-sm-12'>
+                                <div className='col-sm-8'>
+                                    <label htmlFor='' >Upload profile photo(optional)</label>
+                                    {isLoading ? '' :
+                                        status ? '' : <p className={!disable ? 'alert alert-danger p-0 text-center d-none' : 'alert alert-danger p-0 text-center'}>{message}</p>
+                                    }
+                                    <input type='file' className='form-control border-0 border-bottom border-dark' placeholder='Upload' onChange={(e) => selectPhoto(e)} />
                                 </div>
+                                <div className='col-sm-4'>
+                                    <button className='btn btnbg w-100 text-light py-3' onClick={savePhoto} disabled={dispp}>{isSavingPicture ? <div className="spinner-border text-light opacity-50" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div> : 'Save Profile Picture'}</button>
+                                </div>
+                            </div>
                             <div className='card border-0 p-2'>
                                 <h4 className='card-header'>Details</h4>
                                 {isLoading ? '' :
@@ -162,23 +182,21 @@ function AdminProfile({ adminDetail }) {
                                 </div>
                                 <div className='row mt-3'>
                                     <div className='col-6 form-floating'>
-                                        <select className='form-control border-0 border-bottom border-dark' disabled={disable}>
-                                            <option >Please select</option>
-                                            <option >Male</option>
-                                            <option >Female</option>
+                                    <select className='form-control border-0 border-bottom border-dark' defaultValue={gender} disabled={disable} onChange={handleChange}>
+                                            {
+                                                options.map((option) => (
+                                                    <option value={option}>{option}</option>
+                                                ))
+                                            }
                                         </select>
                                         <label htmlFor='' >Gender(optional)</label>
                                     </div>
                                     <div className='col-6 form-floating'>
-                                        <input type='date' className='form-control border-0 border-bottom border-dark' disabled={disable} placeholder='phone' />
-                                        <label htmlFor='' >Birthdate(optional)</label>
-                                    </div>
-                                </div>
-                                <div className='row mt-3'>
-                                    <div className='col-6 form-floating'>
                                         <input type='text' className='form-control border-0 border-bottom border-dark' disabled={disable} value={username} placeholder='username' onChange={(e) => setusername(e.target.value)} />
                                         <label htmlFor='' >Username(optional)</label>
                                     </div>
+                                </div>
+                                <div className='row mt-3'>
 
                                 </div>
                                 <div className='row shadow mt-4 btn-group pb-3'>
@@ -186,7 +204,9 @@ function AdminProfile({ adminDetail }) {
                                         <button className='btn btn-success w-100' onClick={editProfile}>EDIT</button>
                                     </div>
                                     <div className='col-6 bgs rounded'>
-                                        <button className='border-0 pt-2 w-100 bgs text-light' disabled={disable} onClick={saveProfile}>SAVE</button>
+                                        <button className='border-0 pt-2 w-100 bgs text-light' disabled={disable} onClick={saveProfile}>{isSaving ? <div className="spinner-border text-light opacity-50" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div> : 'SAVE'}</button>
                                     </div>
                                 </div>
                             </div>

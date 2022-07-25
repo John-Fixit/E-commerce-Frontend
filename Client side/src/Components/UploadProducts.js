@@ -12,10 +12,8 @@ function UploadProducts({adminDetail}) {
   const [message, setmessage] = useState('')
   const [status, setstatus] = useState(false)
   const [num, setnum] = useState(0)
-  const newProductURI = 'http://localhost:4000/admin/products'
-  // useEffect(()=>{
-  //     console.log( adminDetail.email);
-  // },[])
+  const [isGoing, setisGoing] = useState(false)
+  const newProductURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/products'
   const selectProduct = (e) => {
     const selectedProduct = e.target.files[0]
     const reader = new FileReader()
@@ -25,11 +23,13 @@ function UploadProducts({adminDetail}) {
     }
   }
   const uploadProduct = () => {
+    setisGoing(true)
     const fullname = adminDetail.firstname + ' ' + adminDetail.lastname
     const email = adminDetail.email
     const productInfo = {fullname, email, convertedFile, title, price, rate }
     axios.post(newProductURI, productInfo).then((res) => {
       setisLoading(false)
+      setisGoing(false)
       if(res.data.status){
         window.location.reload()
       }else{
@@ -72,7 +72,9 @@ function UploadProducts({adminDetail}) {
                   </div>
                 </div>
                 <div className='col-12'>
-                  <button className='btn btnbg w-100 mt-3 text-light fs-5' onClick={uploadProduct}>Upload</button>
+                  <button className='btn btnbg w-100 mt-3 text-light fs-5' onClick={uploadProduct}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
+                                                    <span className="visually-hidden">Proceed and Delete</span>
+                                                </div> : 'Upload'}</button>
                 </div>
               </div>
             </div>

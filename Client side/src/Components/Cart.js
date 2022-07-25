@@ -8,24 +8,23 @@ import PaystackPop from '@paystack/inline-js'
 function Cart({thisuser}) {
     const navigate = useNavigate()
     useEffect(() => {
-        console.log(thisuser);
-        // setuserId(thisuser._id)
         getCart()
     }, [])
-    const REMOVEURI = 'http://localhost:4000/user/removeCartItem'
-    const CARTURI = 'http://localhost:4000/user/carts'
-    const paymentURI = 'http://localhost:4000/user/payment'
+    const REMOVEURI = 'https://jfix-e-commerce-site.herokuapp.com/user/removeCartItem'
+    const CARTURI = 'https://jfix-e-commerce-site.herokuapp.com/user/carts'
+    const paymentURI = 'https://jfix-e-commerce-site.herokuapp.com/user/payment'
     const [product, setproduct] = useState([])
     const [checkOutAmount, setcheckOutAmount] = useState('')
     const [productVariation, setproductVariation] = useState(1)
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
     const [isGoing, setisGoing] = useState(false)
-    // const [userId, setuserId] = useState('')
     const [email, setemail] = useState('')
     const [contact, setcontact] = useState('')
     const [username, setusername] = useState('')
     const [message, setmessage] = useState('')
     const [status, setstatus] = useState(false)
+    const [isLoading, setisLoading] = useState(true)
+    const [isComing, setisComing] = useState(false)
     const userId = userDetails._id
     const getCart = () => {
         if(userId !=''){
@@ -52,7 +51,9 @@ function Cart({thisuser}) {
     }
     const removeItem = ({ productImage }) => {
         console.log(userId);
+        setisComing(true)
         axios.post(REMOVEURI, { userId, productImage }).then((res) => {
+            setisComing(false)
             window.location.reload()
         })
     }
@@ -65,6 +66,7 @@ function Cart({thisuser}) {
             email,
             contact,
             onSuccess: (transaction) => {
+                setisLoading(false)
                 const paymentDetail = { userId, username, amountToPay, email, paymentReference: transaction.reference }
                 axios.post(paymentURI, paymentDetail).then((res) => {
                     setisGoing(false)
@@ -89,6 +91,10 @@ function Cart({thisuser}) {
         <>
             <div className='container-fluid cont_fluid bg-light padding_nav bg-white py-3'>
                 <div className='row'>
+                    {
+                        isLoading ? '' :
+                        status? '' : <p className='alert alert-danger'>{message}</p>
+                    }
                     <div className='col-sm-9'>
                         <div className='card h-100 shadow py-2 border-0 pt-4 px-2'>
                             <h5 className='card-header bg-white'>Cart ({product.length})</h5>
@@ -109,7 +115,9 @@ function Cart({thisuser}) {
                                                 </div>
                                             </div>
                                             <div className='card-footer bg-white border-top-0 d-flex justify-content-between'>
-                                                <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}><FaTrash /> Remove</button>
+                                                <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}> {isComing ? <div className="spinner-border text-danger opacity-50" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div> : <span ><FaTrash /> Remove</span>}</button>
                                                 <div className='row'>
                                                     {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
                                                     <p className='col-12'>{eachProduct.productVariation} product</p>
@@ -129,8 +137,8 @@ function Cart({thisuser}) {
                                 <p>Sub-Total</p>
                                 <h5>₦ {checkOutAmount}</h5>CHECKOUT ({checkOutAmount})
                             </div>
-                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
-                                <span class="visually-hidden">Loading...</span>
+                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>{isGoing ? <div className="spinner-border opacity-50" role="status">
+                                <span className="visually-hidden">Loading...</span>
                             </div> : `CHECKOUT (${checkOutAmount})`}</button>
                         </div>
                     </div>

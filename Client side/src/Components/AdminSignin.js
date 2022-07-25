@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
 function AdminSignin() {
-  const signinURI = 'http://localhost:4000/admin/signin'
+  const signinURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/signin'
   const [message, setmessage] = useState('')
   const [status, setstatus] = useState(false)
   const [isLoading, setisLoading] = useState(true)
@@ -63,7 +63,7 @@ function AdminSignin() {
                 </div>
                 <div className='email'>
                   <div className='form-floating mt-4'>
-                    <input type='text' className='form-control' name='email' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Email address' />
+                    <input type='text' className='form-control' name='email' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} placeholder='Email address' />
                     <label htmlFor=''>Email Address</label>
                   </div>
                   {
@@ -72,7 +72,7 @@ function AdminSignin() {
                 </div>
                 <div className='password'>
                   <div className='form-floating mt-4'>
-                    <input type='password' className='form-control' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='password' />
+                    <input type='password' className='form-control' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password} placeholder='password' />
                     <label htmlFor=''>Password</label>
                   </div>
                   {
@@ -81,7 +81,7 @@ function AdminSignin() {
                 </div>
                 <div className='privateKey'>
                   <div className='form-floating mt-4'>
-                    <input type='password' className='form-control' name='privateKey' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='privateKey' />
+                    <input type='password' className='form-control' name='privateKey' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.privateKey} placeholder='privateKey' />
                     <label htmlFor=''>Your privateKey</label>
                   </div>
                   {
@@ -92,8 +92,8 @@ function AdminSignin() {
                   <p className='text-muted'>Login as a customer <Link to='/signin' className='text-decoration-none'>Sign in</Link></p>
                 </div>
                 <div className='button mt-4'>
-                  <button className="btn bgs text-center w-100 text-white fs-5" type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                  <button className="btn bgs text-center w-100 text-white fs-5" type='submit'>{isGoing ? <div className="spinner-border text-white opacity-50" role="status">
+                    <span className="visually-hidden">Loading...</span>
                   </div> : 'Login account'}</button>
                 </div>
               </form>

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import style from './style.css'
 function Signin() {
     const navigate = useNavigate()
-    const SIGNINURI = 'http://localhost:4000/user/signin'
+    const SIGNINURI = 'https://jfix-e-commerce-site.herokuapp.com/user/signin'
     const [status, setstatus] = useState('')
     const [message, setmessage] = useState('')
     const [token, settoken] = useState('')
@@ -28,6 +28,7 @@ function Signin() {
                 setisGoing(false)
                 setstatus(feedBack.status)
                 settoken(() => { return feedBack.token })
+                let count = 0
                 if (feedBack.status) {
                     localStorage.setItem('token', JSON.stringify(feedBack.token))
                     navigate('/homepage/')
@@ -35,6 +36,7 @@ function Signin() {
                 else {
                     setmessage(feedBack.message)
                 }
+                
             })
         },
         validationSchema: yup.object({
@@ -56,7 +58,7 @@ function Signin() {
                                 <div className='row'>
                                     <div className='form-floating mt-2 col-md-12'>
                                         <div className='form-floating'>
-                                            <input type='text' name='email' className='form-control mx-auto' placeholder='Email Address' onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                            <input type='text' name='email' className='form-control mx-auto' placeholder='Email Address' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email}/>
                                             <label for='' className='text-muted ms-2'>Email Address</label>
                                             {formik.touched.email ? <small className='text-danger'>{formik.errors.email}</small> : ''}
                                         </div>
@@ -65,14 +67,14 @@ function Signin() {
                                 <div className='mt-2 col-md-12'>
                                     <div className='form-floating'>
 
-                                        <input type='password' name='password' className='form-control mx-auto' placeholder='Password' onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                                        <input type='password' name='password' className='form-control mx-auto' placeholder='Password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/>
                                         <label for='' className='text-muted ms-2'>Password</label>
                                         {formik.touched.password ? <small className='text-danger'>{formik.errors.password}</small> : ''}
                                     </div>
                                 </div>
                                 <div className='text-center mt-2'>
                                     {
-                                        !status ? <small className='text-danger text-center fs-4'>{message}</small> : ''
+                                        !status ? <small className='text-danger text-center fs-5'>{message}</small> : ''
                                     }
                                 </div>
                                 <div className='row'>
@@ -85,7 +87,7 @@ function Signin() {
                                 </div>
                                 <div className='col-12 mt-3 text-end'>
                                     <button className='btn btnbg px-5 text-light py-2' type='submit'>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                                        <span className="visually-hidden">Loading...</span>
                                     </div> : 'Login account'}</button>
                                 </div>
                             </form>

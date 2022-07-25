@@ -13,8 +13,9 @@ function AdminNav({ firstname, profilePhoto }) {
         if (window.confirm(`Are you sure to log out ?`)) {
             localStorage.removeItem('admintoken')
             localStorage.removeItem('adminInfo')
-            navigate('/')
+            navigate('/admin_login')
         }
+       
     }
     return (
         <>

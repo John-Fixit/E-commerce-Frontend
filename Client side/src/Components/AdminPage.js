@@ -12,8 +12,8 @@ import AdminProfile from './AdminProfile'
 
 function AdminPage() {
 
-  const getHomeURI = 'http://localhost:4000/admin/home'
-  const customerURI = 'http://localhost:4000/admin/customers'
+  const getHomeURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/home'
+  const customerURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/customers'
   const navigate = useNavigate()
   const [customers, setcustomers] = useState([])
   const [staff, setstaff] = useState([])
@@ -65,7 +65,7 @@ function AdminPage() {
     <AdminNav firstname = {firstname} profilePhoto={profilePhoto}/>
         <Routes>
             <Route path='/' element={<AdminHome customers={customers} staff={staff} products={products}/>}/>
-            <Route path='/customers' element={<CustomerList customers={customers} staff={staff}/>}/>
+            <Route path='/customers' element={<CustomerList customers={customers} staff={staff} adminDetail={adminDetail}/>}/>
             <Route path='/addProduct' element={<UploadProducts adminDetail={adminDetail}/>} />
             <Route path='/signup' element={<Adminsignup />}/>
             <Route path='/profile' element={<AdminProfile adminDetail={adminDetail}/>} />

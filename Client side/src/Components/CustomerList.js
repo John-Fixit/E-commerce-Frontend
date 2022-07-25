@@ -2,12 +2,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { FaTrashAlt } from 'react-icons/fa';
 import style from './style.css'
-function CustomerList({ customers, staff }) {
+function CustomerList({ customers, staff, adminDetail }) {
   const [allCustomer, setallCustomer] = useState('')
   const [allStaff, setallStaff] = useState('')
   const [isLoading, setisLoading] = useState(true)
-  const deleteCustomerURI = 'http://localhost:4000/admin/deleteCustomer'
-  const deleteStaffURI = 'http://localhost:4000/admin/deleteStaff'
+  const [isGoing, setisGoing] = useState(false)
+  const [isComing, setisComing] = useState(false)
+  const deleteCustomerURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteCustomer'
+  const deleteStaffURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteStaff'
 
   const customerDlt = ({ customerId }) => {
     if (window.confirm(`Are you sure to delete this user! because the user data will be deleted permsnently from the database?`)) {
@@ -21,14 +23,19 @@ function CustomerList({ customers, staff }) {
     }
   }
   const staffDlt = ({ staffId }) => {
-    if (window.confirm(`Are you sure to delete this staff! because the staff data will be deleted permsnently from the database?`)) {
-      axios.post(deleteStaffURI, { staffId }).then((res) => {
-        if (res.data.status) {
-          window.location.reload()
-        } else {
-          alert(`${res.data.message}`)
-        }
-      })
+    if (adminDetail._id == staffId) {
+      alert(`Please go to your profile and follow the instruction to delete your account!`)
+    }
+    else {
+      if (window.confirm(`Are you sure to delete this staff! because the staff data will be deleted permsnently from the database?`)) {
+        axios.post(deleteStaffURI, { staffId }).then((res) => {
+          if (res.data.status) {
+            window.location.reload()
+          } else {
+            alert(`${res.data.message}`)
+          }
+        })
+      }
     }
   }
   return (

@@ -35,6 +35,7 @@ const signup = (req, res) => {
     userModel.findOne({ email: userDetails.email }, (err, user) => {
         if (err) {
             console.log(`error dey`);
+            res.send({message: `There's an error, please check your connection`, status: false})
         } else {
             if (user) {
                 res.send({ message: `user already exist`, status: false })
@@ -43,7 +44,7 @@ const signup = (req, res) => {
                 const form = new userModel(userDetails)
                 form.save((err) => {
                     if (err) {
-                        res.status(501).send({ message: `Registration error, please checl your connection`, status: false })
+                        res.status(501).send({ message: `Registration error, please check your connection`, status: false })
                     } else {
                         var mailMessage = {
                             from: EMAIL,
@@ -58,11 +59,9 @@ const signup = (req, res) => {
                         }
                         transporter.sendMail(mailMessage, (err, info) => {
                             if (err) {
-                                console.log(err);
                                 res.send({message: `Connection error!`, status: false})
                             }
                             else {
-                                console.log(info.response);
                                 res.status(200).send({ message: `Registration successfull !!!`, status: true, })
                             }
                         })
@@ -78,20 +77,21 @@ const signin = (req, res) => {
     userModel.findOne({ email: email }, (err, user) => {
         if (err) {
             console.log(`internal error`);
+            res.send({message: `Internal server error, check your connection!`, status: false})
         }
         else {
             if (!user) {
-                console.log(`no account of this details is with us`);
-                res.send({ message: `No account of this details is with us`, status: false })
+                res.send({ message: `No account of this details is with me, Please signup`, status: false })
             }
             else {
                 user.validatePassword(password, (err, same) => {
                     if (err) {
                         console.log(`issue occur`);
+                        res.send({message: `Connection Error! please check your connection`, status: false})
                     }
                     else {
                         if (same) {
-                            const token = jwt.sign({ email }, SECRET, { expiresIn: '6h' })
+                            const token = jwt.sign({ email }, SECRET, { expiresIn: '2h' })
                             res.send({ message: 'authenticated successfull', status: true, token })
                         }
                         else {
@@ -131,7 +131,6 @@ const getUser = (req, res) => {
     })
 }
 const getCart = (req, res) => {
-    console.log(req.body);
     const userId = req.body.userId
     userModel.findOne({ "_id": userId }, (err, user) => {
         if (err) {
@@ -142,7 +141,6 @@ const getCart = (req, res) => {
             user.cartProduct.map((eachProduct) => {
                 totalPrice += parseInt(eachProduct.productPrice)
             })
-            console.log(user);
             res.send({ message: `Cart products`, user, products: user.cartProduct, status: true, totalPrice })
         }
     })
@@ -156,7 +154,6 @@ const cartProduct = (req, res) => {
     userModel.findOneAndUpdate({ '_id': userId }, { $push: { 'cartProduct': { productImage, productPrice, productTitle, productVariation } } }, (err, updatedVersion) => {
         if (err) {
             res.send({ message: `Internal server error`, status: false })
-            console.log(`err dey for here`);
         }
         else {
             res.send({ message: `Product added to your cart`, status: true })
@@ -168,8 +165,7 @@ const removeCartItem = (req, res) => {
     const productImage = req.body.productImage
     userModel.findOne({ '_id': userId }, (err, result) => {
         if (err) {
-            console.log(err);
-            console.log(`There's an error`);
+            res.send({message: `Internal server error, please check your connection`, status: false})
         } else {
             const thisUser = result
             let found = thisUser.cartProduct.filter(thisOne =>
@@ -178,38 +174,29 @@ const removeCartItem = (req, res) => {
             if (found) {
                 userModel.findOneAndUpdate({ '_id': userId }, { 'cartProduct': found }, (err, productRemains) => {
                     if (err) {
-                        console.log(`An error occur in the updating of the remaining product`);
+                        res.send({message: `An error occur in the updating of the remaining product`, status: false})
                     } else {
-                        console.log(productRemains);
+                        res.send({message: `Deleted successfully`, status: true})
                     }
                 })
             }
         }
     })
 }
-
 const saveProfile = (req, res) => {
-    const userDetails = req.body
     const userId = req.body.userId
     const userEmail = req.body.email
     const firstname = req.body.firstname
     const lastname = req.body.lastname
     const contact = req.body.contact
-    cloudinary.v2.uploader.upload(profilePhoto, (err, result) => {
-        if (err) {
-            console.log(`Unable to upload, due to internal server error`);
-        } else {
-            const uploadedPhoto = result.secure_url
-            userModel.findOneAndUpdate({ '_id': userId }, { $set: {'firstname': firstname, 'lastname': lastname, 'email': userEmail, 'contact': contact } }, (err, result) => {
+    const gender = req.body.gender
+            userModel.findOneAndUpdate({ '_id': userId }, { $set: {'firstname': firstname, 'lastname': lastname, 'email': userEmail, 'contact': contact, 'gender': gender } }, (err, result) => {
                 if (err) {
-                    console.log(err);
-                    console.log(`error dey`);
+                    res.send({message: `Internal server error, please check your connection`, status: false})
                 } else {
-                    console.log(result);
+                    res.send({message: `updated succesfully`, status: true})
                 }
             })
-        }
-    })
 }
 const saveProfilePhoto=(req, res)=>{
     const profilePhoto = req.body.profilePhoto
@@ -217,6 +204,7 @@ const saveProfilePhoto=(req, res)=>{
     cloudinary.v2.uploader.upload(profilePhoto, (err, result) => {
         if (err) {
             console.log(`Unable to upload, due to internal server error`);
+            res.send({message: `Unable to upload, due to internalserver error, please try again`})
         } else {
             const uploadedPhoto = result.secure_url
             userModel.findOneAndUpdate({ '_id': userId }, {'profilePhoto': uploadedPhoto }, (err, result) => {
@@ -262,7 +250,6 @@ const payment = (req, res) => {
                 }
                 transporter.sendMail(mailMessages, (err, info)=>{
                     if(err){
-                        console.log(err);
                         res.send({message:`Network error occur in the transaction`, status: false})
                     }else{
                         user.cartProduct = [];

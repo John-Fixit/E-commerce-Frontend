@@ -54,7 +54,7 @@ const signup = (req, res) => {
                                     <p >Welcome to JFIX e-commerce administrative site!</p>
                                     <p >Congratulations! Your JFIX e-commerce admin. account has been successfully created.</p>
                                     <p >With JFIX e-commerce site, you are to manage, protect and secure the site from unrelevant effect</p>
-                                    <b>This is your admin private key for your account: ${privateKey}, <i>DO NOT SHARE THIS WITH ANYONE</i></b>
+                                    <b>This is your admin private key for your account: ${privateKey}, <i style="color: red;">DO NOT SHARE THIS WITH ANYONE</i></b>
                                     <p>Sign in through <a href='https://google.com/admin_login'>link</a> to your admin account
                                     Thank you!`
                                 }
@@ -63,7 +63,7 @@ const signup = (req, res) => {
                                         res.send({ message: `Invalid email`, status: false })
                                     }
                                     else {
-                                        res.send({ message: `Registration successfull, Please login to your gmail account ${email} for your private admin key.`, status: true })
+                                        res.send({ message: `Registration successfull, Please login to the Gmail account ${email} for your private admin key.`, status: true })
                                     }
                                 })
                             }
@@ -81,7 +81,6 @@ const signin = (req, res) => {
     const privateKey = req.body.privateKey
     adminModel.findOne({ 'email': email }, (err, thisUser) => {
         if (err) {
-            console.log(`Internal server error!`);
             res.send({ messsage: `Network error! please check your connection`, status: false })
         } else {
             if (!thisUser) {
@@ -214,7 +213,6 @@ const products = (req, res) => {
                             res.send({ message: `Error occur`, status: false })
                         }
                         else {
-                            console.log(allAdmin);
                             let filtrateAdmin = allAdmin.filter((fAdmin, index) => (
                                 email != fAdmin.email
                             ))
@@ -251,7 +249,8 @@ const saveProfile = (req, res) => {
     const username = req.body.username;
     const adminId = req.body.adminId;
     const contact = req.body.contact;
-    adminModel.findOneAndUpdate({ '_id': adminId }, { $set: { 'firstname': firstname, 'lastname': lastname, 'email': email, 'username': username, 'contact': contact } }, (err, result) => {
+    const gender = req.body.gender
+    adminModel.findOneAndUpdate({ '_id': adminId }, { $set: { 'firstname': firstname, 'lastname': lastname, 'email': email, 'username': username, 'contact': contact, 'gender': gender } }, (err, result) => {
         if (err) {
             res.send({ message: `Internal server error`, status: false })
         } else {
