@@ -26,6 +26,7 @@ var transporter = nodemailer.createTransport({
 const signup = (req, res) => {
     const adminDetail = req.body
     const email = adminDetail.email
+    const password = adminDetail.password
     const fullname = adminDetail.firstname + ' ' + adminDetail.lastname
     adminModel.findOne({ 'email': email }, (err, foundUser) => {
         if (err) {
@@ -52,15 +53,15 @@ const signup = (req, res) => {
                                     subject: 'Registration successfull!',
                                     html: `<b class='card-title'>Dear ${fullname},</b>
                                     <p >Welcome to JFIX e-commerce administrative site!</p>
-                                    <p >Congratulations! Your JFIX e-commerce admin. account has been successfully created.</p>
+                                    <p >Congratulations! Your JFIX e-commerce staff account has been successfully created by another admin (${adminDetail.addedBy})</p>
                                     <p >With JFIX e-commerce site, you are to manage, protect and secure the site from unrelevant effect</p>
-                                    <b>This is your admin private key for your account: ${privateKey}, <i style="color: red;">DO NOT SHARE THIS WITH ANYONE</i></b>
-                                    <p>Sign in through <a href='https://google.com/admin_login'>link</a> to your admin account
+                                    <b>This is your private key and password for your account: privateKey => ${privateKey} & password => ${password}, <i style="color: red;">DO NOT SHARE THIS WITH ANYONE</i></b>
+                                    <p>Sign in through <a href='https://ecomfix.netlify.app/admin_login' style='text-decoration: none; color: #FF5722;'>link</a> to access your staff account
                                     Thank you!`
                                 }
                                 transporter.sendMail(mailMessage, (err, result) => {
                                     if (err) {
-                                        res.send({ message: `Invalid email`, status: false })
+                                       console.log(`Connection error`);
                                     }
                                     else {
                                         res.send({ message: `Registration successfull, Please login to the Gmail account ${email} for your private admin key.`, status: true })

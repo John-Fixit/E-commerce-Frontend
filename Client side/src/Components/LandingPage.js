@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { BiCertification } from "react-icons/bi";
 import style from './style.css'
 import axios from 'axios';
 import { FaCartPlus } from 'react-icons/fa';
+import Footage from './Footage';
 function LandingPage() {
     const navigate = useNavigate()
     const productURI = 'https://jfix-e-commerce-site.herokuapp.com/user/products'
@@ -18,10 +18,10 @@ function LandingPage() {
             }
         })
     }, [])
-    const modalOut=(title)=>{
-        settitle(()=>{return title})
+    const modalOut = (title) => {
+        settitle(() => { return title })
     }
-    const signup=()=>{
+    const signup = () => {
         navigate('/signup')
     }
     return (
@@ -41,6 +41,9 @@ function LandingPage() {
                                 <Link to='/' className="nav-link active text-light">About us</Link>
                             </li>
                             <li className="nav-item ms-5">
+                                <Link to='/contact' className="nav-link active text-light">Contact</Link>
+                            </li>
+                            <li className="nav-item ms-5">
                                 <Link to='/' className="nav-link active text-light">Help</Link>
                             </li>
                         </ul>
@@ -52,7 +55,7 @@ function LandingPage() {
                 </div>
             </nav>
             <div className='container-fluid cont_fluid'>
-                    <h3 className='card-header rounded border-0 btnbg mb-2 text-light'> <marquee behavior="infinite" direction="alternate" className='btnbg text-light macque'>Welcome to JFIX e-commerce site.</marquee></h3>
+                <h3 className='card-header rounded border-0 btnbg mb-2 text-light'> <marquee behavior="infinite" direction="alternate" className='btnbg text-light macque'>Welcome to JFIX e-commerce site.</marquee></h3>
                 <div className='products_row'>
                     <div className='landingpageText'>
                         <p className='card-body col-lg-7 col-md-12 fw-bold'>
@@ -65,9 +68,11 @@ function LandingPage() {
                 <div className='col-sm-12 products_row'>
                     <marquee behavior="infinite" direction="alternate" className='btnbg text-light macque'>Create an account to access your mainboard at JFIX e-commerce site</marquee>
                     <div className='row'>
+                        <p className='card-header text-center text-muted fs-4'>All Products Available</p>
                         {isLoading ? <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
                         </div> :
+
                             products.map((eachProduct, index) => (
                                 <div className='col-lg-3 col-md-6 col-sm-12 mt-3' key={index}>
                                     <div className='card shadow p-2 h-100'>
@@ -78,7 +83,7 @@ function LandingPage() {
                                             <p className="card-text text-start">Price : ₦{eachProduct.price} <span >per product</span></p>
                                         </div>
                                         <div className="card-footer">
-                                            <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={()=>modalOut(eachProduct.title)}>                                                Add To Cart <FaCartPlus size='4vh' className='float-start' />
+                                            <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut(eachProduct.title)}>                                                Add To Cart <FaCartPlus size='4vh' className='float-start' />
                                             </button>
                                             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -109,6 +114,7 @@ function LandingPage() {
                 </div>
                 <Link to='/signup' className='btn mt-3 btnbg text-white py-2 px-4' >Get Started </Link>
             </div>
+            <Footage />
         </>
     )
 }

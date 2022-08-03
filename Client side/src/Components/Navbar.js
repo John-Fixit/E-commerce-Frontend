@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FaCartArrowDown, FaRegUser } from 'react-icons/fa'
-import { FaRegBookmark } from 'react-icons/fa'
 import { BiCertification } from "react-icons/bi";
-import { MdAutorenew } from "react-icons/md";
 import user from '../Images/user.PNG'
 import style from './style.css'
-import axios from 'axios';
 function Navbar({thisuser}) {
     let userDetails = []
     if(localStorage.userDetails){
@@ -20,7 +17,7 @@ function Navbar({thisuser}) {
         userId = userDetails._id
     }
     const navigate = useNavigate()
-    useEffect(() => {
+    useEffect(() => { 
         if(thisuser !=''){
             setcartProduct(() => { return thisuser.cartProduct.length })
             setfirstname(() => { return thisuser.username })
@@ -72,10 +69,10 @@ function Navbar({thisuser}) {
                                 <img src={ profilePhoto != '' ? profilePhoto : user} className='card-img-top rounded-circle' style={{ width: '7vh', height: '7vh' }} /><span className='text-light'> Hi, {firstname}</span>
                             </button>
                             <ul className="dropdown-menu text-light" aria-labelledby="navbarDropdown">
-                                <li><Link to="/homepage/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
-                                <li><Link to="" className="dropdown-item"><BiCertification /> Settings</Link></li>
+                                <li><Link to="/homepage/profile" className="dropdown-item list"><FaRegUser /> Profile</Link></li>
+                                <li><Link to="" className="dropdown-item list"><BiCertification /> Settings</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
-                                <li><button className="btn dropdown-item" onClick={logOut}>Log out</button></li>
+                                <li><button className="btn dropdown-item list" onClick={logOut}>Log out</button></li>
                             </ul>
                         </div>
                     </div>

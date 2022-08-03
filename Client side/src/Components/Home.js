@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import Navbar from './Navbar'
 import style from './style.css'
 import img1 from '../Images/bgImg1.jpg'
 import img2 from '../Images/bgImg2.jpg'
@@ -13,30 +12,18 @@ import 'aos/dist/aos.css'
 function Home({ allProducts, thisuser }) {
 
   const navigate = useNavigate()
-  const [products, setproducts] = useState([])
-  const [allProduct, setallProduct] = useState([])
-  const HOMEURI = 'https://jfix-e-commerce-site.herokuapp.com/user/home'
   const CARTURI = 'https://jfix-e-commerce-site.herokuapp.com/user/cart'
 
   const [index, setindex] = useState('')
   const [productVariation, setproductVariation] = useState(1)
-  const [isLoading, setisLoading] = useState(true)
   const [productTittle, setproductTittle] = useState('')
   const [productPrice, setproductPrice] = useState('')
   useEffect(() => {
-    axios.get('https://fakestoreapi.com/products').then((res) => {
-      const responseFromAPI = res.data
-      setproducts(() => {
-        setisLoading(false)
-        return responseFromAPI
-      })
-    })
     AOS.init()
     AOS.refresh()
   }, [])
 
   const modalOut = (productDetail) => {
-    console.log(productDetail);
     setindex(() => { return productDetail.index })
     setproductTittle(() => { return productDetail.titleOfProduct })
     setproductPrice(() => { return productDetail.priceOfProduct })
@@ -155,12 +142,8 @@ function Home({ allProducts, thisuser }) {
           </button>
         </div>
         <div className='container-fluid text-center'>
-          {
-            isLoading ? <div className="spinner-border " role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div> :
-              <div className='col-12 products_row'>
-                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, Purchase and enjoy our product by adding favourite product to your cart.</span></marquee>
+          
+                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, we're glad you stopped by!</span></marquee>
 
                 <div className='row'>
                   {
@@ -170,7 +153,7 @@ function Home({ allProducts, thisuser }) {
                       allProducts.map((eachProduct, index) => (
                         <div className='col-lg-3 col-md-6 mt-3' key={index}>
                           <div className="card h-100 rounded-3 pt-3 shadow" data-aos='zoom-in' data-aos-delay='50' >
-                            <img src={eachProduct.image} className="card-img-top mx-auto" alt="..." />
+                            <img src={eachProduct.image} className="card-img-top mx-auto w-75" alt="..." />
                             <div className="card-body">
                               <h6 className="card-title text-start">{eachProduct.title}</h6>
                               <div className='d-flex justify-content-between'>
@@ -185,6 +168,7 @@ function Home({ allProducts, thisuser }) {
                             </div>
                           </div>
                         </div>
+                        
                       ))
                   }
                 </div>
@@ -211,16 +195,14 @@ function Home({ allProducts, thisuser }) {
                         </div>
                       </div>
                       <div className="modal-footer btn-group shadow">
-                        <button type="button" className="btn textColor" data-bs-dismiss="modal" onClick={() => contShopping({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId: thisuser._id, productVariation })}>Continue Shopping</button>
-                        <button className='btn btnbg text-light' data-bs-dismiss="modal" onClick={() => addToCart({ productImage: products[index].image, title: products[index].title, price: Math.round(products[index].price * 50), userId: thisuser._id, productVariation })}>View Cart and Checkout</button>
+                        <button type="button" className="btn textColor" data-bs-dismiss="modal" onClick={() => contShopping({ productImage: allProducts[index].image, title: allProducts[index].title, price: Math.round(allProducts[index].price), userId: thisuser._id, productVariation })}>Continue Shopping</button>
+                        <button className='btn btnbg text-light' data-bs-dismiss="modal" onClick={() => addToCart({ productImage: allProducts[index].image, title: allProducts[index].title, price: Math.round(allProducts[index].price), userId: thisuser._id, productVariation })}>View Cart and Checkout</button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-          }
         </div>
-        <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, we are the best of the best</span></marquee>
+        <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Enjoy us product with no doubt!</span></marquee>
       </div>
     </>
   )

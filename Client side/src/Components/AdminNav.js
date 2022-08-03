@@ -1,12 +1,10 @@
 import React from 'react'
 import user from '../Images/user.PNG'
 import { Link, useNavigate } from 'react-router-dom'
-import { FaCartArrowDown, FaRegUser } from 'react-icons/fa'
+import { FaRegUser } from 'react-icons/fa'
 import { FaRegBookmark } from 'react-icons/fa'
 import { BiCertification } from "react-icons/bi";
-import { MdAutorenew } from "react-icons/md";
 import style from './style.css'
-import { useState } from 'react'
 function AdminNav({ firstname, profilePhoto }) {
     const navigate = useNavigate()
     const logOut = () => {
@@ -28,7 +26,7 @@ function AdminNav({ firstname, profilePhoto }) {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-5" style={{ marginLeft: '6vh' }}>
                             <li className="nav-item ms-3">
-                                <Link to='/admin/' className="nav-link active text-light ">Home</Link>
+                                <Link to='/admin' className="nav-link active text-light ">Home</Link>
                             </li>
                             <li className="nav-item ms-3">
                                 <Link to='/admin/customers' className="nav-link active text-light">Customer List</Link>
@@ -43,14 +41,14 @@ function AdminNav({ firstname, profilePhoto }) {
                         </form>
                         <div className="nav-item dropdown ms-3">
                             <button type="button" className="border-0 bgs dropdown-toggle text-light" id='navbarDropdown' data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src={ profilePhoto == '' ? user : profilePhoto} className='card-img-top rounded-circle' style={{ width: '7vh', height: '7vh' }} /><span className='text-light'>Hi, {firstname}</span>
+                                <img src={ profilePhoto == '' ? user : profilePhoto} className='card-img-top rounded-circle' style={{ width: '7vh', height: '7vh' }} /><span className='text-light'> Hi, {firstname}</span>
                             </button>
                             <ul className="dropdown-menu text-light" aria-labelledby="navbarDropdown">
-                                <li><Link to="/admin/profile" className="dropdown-item"><FaRegUser /> Profile</Link></li>
-                                <li><Link to="/admin/signup" className="dropdown-item"><FaRegBookmark /> Add New Staff</Link></li>
-                                <li><Link to="" className="dropdown-item"><BiCertification /> Settings</Link></li>
+                                <li><Link to="/admin/profile" className="dropdown-item list"><FaRegUser /> Profile</Link></li>
+                                <li><Link to="/admin/signup" className="dropdown-item list"><FaRegBookmark /> Add New Staff</Link></li>
+                                <li><Link to="" className="dropdown-item list"><BiCertification /> Settings</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
-                                <li><button className="btn dropdown-item" onClick={logOut}>Log out</button></li>
+                                <li><button className="btn dropdown-item list" onClick={logOut}>Log out</button></li>
                             </ul>
                         </div>
                     </div>

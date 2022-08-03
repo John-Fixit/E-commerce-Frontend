@@ -99,7 +99,7 @@ function Profile() {
                 navigate('/signin')
             }
             else {
-                console.log(res.data.message);
+                alert(res.data.message);
             }
         })
     }

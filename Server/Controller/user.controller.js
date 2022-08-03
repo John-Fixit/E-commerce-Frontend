@@ -34,11 +34,10 @@ const signup = (req, res) => {
     const userFullName = userDetails.firstname + ' ' + userDetails.lastname
     userModel.findOne({ email: userDetails.email }, (err, user) => {
         if (err) {
-            console.log(`error dey`);
             res.send({message: `There's an error, please check your connection`, status: false})
         } else {
             if (user) {
-                res.send({ message: `user already exist`, status: false })
+                res.send({ message: `user already exist, with the email entered`, status: false })
             }
             else {
                 const form = new userModel(userDetails)
@@ -134,7 +133,6 @@ const getCart = (req, res) => {
     const userId = req.body.userId
     userModel.findOne({ "_id": userId }, (err, user) => {
         if (err) {
-            console.log(`Can't find the user`);
             res.send({ message: `internal server error`, status: false })
         } else {
             let totalPrice = 0;
@@ -203,7 +201,6 @@ const saveProfilePhoto=(req, res)=>{
     const userId = req.body.userId
     cloudinary.v2.uploader.upload(profilePhoto, (err, result) => {
         if (err) {
-            console.log(`Unable to upload, due to internal server error`);
             res.send({message: `Unable to upload, due to internalserver error, please try again`})
         } else {
             const uploadedPhoto = result.secure_url
@@ -292,17 +289,15 @@ const sendEmail = (req, res) => {
         html: `<b class='card-title'>Dear ${userEmail},</b>
             <p >Welcome to JFIX commerce site!</p>
             <p >Congratulations! your JFIX e-commerce account has been successfully created.</p>
-            <p >With JFIX ecommerce, you can now enjoy peace mind of shopping without cash involved. it's a simple, fast and secure.</p>
+            <p >With JFIX ecommerce, you will enjoy peace mind of shopping without cash involved. it's a simple, fast and secure.</p>
             Thank you!
         `
     }
     transporter.sendMail(mailMessages, (err, info) => {
         if (err) {
-            console.log(err);
-            res.send(`Error dey`)
+            res.send({message:`Error dey`, status: false})
         }
         else {
-            console.log(`Email sent successfully: ${info.response}`);
             res.send(`Email sent successfully: ${info.response}`)
         }
     })
@@ -318,4 +313,21 @@ const deleteAccount=(req, res)=>{
         }
     })
 }
-module.exports = { getLandingPage, signup, signin, home, getUser, getCart, cartProduct, removeCartItem, saveProfile, saveProfilePhoto, product, payment, sendEmail, deleteAccount }
+const contactMessage =(req, res)=>{
+        const mailToSend={
+            from: req.body.senderEmail,
+            to: EMAIL,
+            subject: `${req.body.senderName} send message to Ecomfix website- titled: ${req.body.senderTitle}`,
+            text: `${req.body.senderMessage}`
+        }
+        transporter.sendMail(mailToSend, (err, res)=>{
+            if(err){
+                console.log(`Network error`);
+                res.send({message: `Connection error`, status: false})
+            }else{
+                console.log(res.response);
+                res.send({message: `Message sent successfully`, status: true})
+            }
+        })
+}
+module.exports = { getLandingPage, signup, signin, home, getUser, getCart, cartProduct, removeCartItem, saveProfile, saveProfilePhoto, product, payment, sendEmail, deleteAccount, contactMessage }

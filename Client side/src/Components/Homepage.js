@@ -10,13 +10,8 @@ function Homepage() {
   const [thisuser, setthisuser] = useState('')
   const navigate = useNavigate()
   const [allProducts, setallProducts] = useState([])
-  const [otherProduct, setotherProduct] = useState([])
   const HOMEURI = 'https://jfix-e-commerce-site.herokuapp.com/user/home'
   const productURI = 'https://jfix-e-commerce-site.herokuapp.com/user/products'
-  const [userId, setuserId] = useState('')
-  const [isLoading, setisLoading] = useState(true)
-
-  const GETUSERURI = 'https://jfix-e-commerce-site.herokuapp.com/user/thisuser'
   useEffect(()=>{
     getHome()
   }, [])
@@ -35,10 +30,6 @@ function Homepage() {
       .then((res) => {
         if (res.data.status) {
           const userInfo = res.data.userDetails
-          const firstname = userInfo.firstname
-          const lastname = userInfo.lastname
-          const email = userInfo.email
-          const userId = userInfo._id
           localStorage.setItem('userDetails', JSON.stringify(userInfo))
           setthisuser(userInfo)
           axios.get(productURI).then((res) => {

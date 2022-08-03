@@ -11,8 +11,6 @@ function Signin() {
     const SIGNINURI = 'https://jfix-e-commerce-site.herokuapp.com/user/signin'
     const [status, setstatus] = useState('')
     const [message, setmessage] = useState('')
-    const [token, settoken] = useState('')
-    const [isLoading, setisLoading] = useState(true)
     const [isGoing, setisGoing] = useState(false)
     const formik = useFormik({
         initialValues: {
@@ -24,11 +22,8 @@ function Signin() {
             setisGoing(true)
             axios.post(SIGNINURI, authDetails).then((res) => {
                 let feedBack = res.data
-                setisLoading(false)
                 setisGoing(false)
                 setstatus(feedBack.status)
-                settoken(() => { return feedBack.token })
-                let count = 0
                 if (feedBack.status) {
                     localStorage.setItem('token', JSON.stringify(feedBack.token))
                     navigate('/homepage/')
@@ -53,7 +48,6 @@ function Signin() {
                             <h1 className='card-header text-center text-light border-bottom-0 btnbg'>Sign in</h1>
                         </div>
                         <div className='p-3'>
-
                             <form action='' onSubmit={formik.handleSubmit}>
                                 <div className='row'>
                                     <div className='form-floating mt-2 col-md-12'>

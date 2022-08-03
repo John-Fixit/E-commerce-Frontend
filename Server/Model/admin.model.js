@@ -9,7 +9,8 @@ const adminSchema = new mongoose.Schema({
     gender: String,
     profilePhoto: String,
     password: String,
-    privateKey: String
+    privateKey: String,
+    addedBy: String
 })
 const product = new mongoose.Schema({
     image: String,

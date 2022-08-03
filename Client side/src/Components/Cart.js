@@ -15,7 +15,6 @@ function Cart({thisuser}) {
     const paymentURI = 'https://jfix-e-commerce-site.herokuapp.com/user/payment'
     const [product, setproduct] = useState([])
     const [checkOutAmount, setcheckOutAmount] = useState('')
-    const [productVariation, setproductVariation] = useState(1)
     const userDetails = JSON.parse(localStorage.getItem('userDetails'))
     const [isGoing, setisGoing] = useState(false)
     const [email, setemail] = useState('')
@@ -36,18 +35,6 @@ function Cart({thisuser}) {
                 setcheckOutAmount(() => { return res.data.totalPrice })
             })
         }
-    }
-    const increament = (index) => {
-        // let kk = product[index].productVariation +1;
-        // console.log(kk);
-        // setproductVariation(()=>{
-        //  return product[index].productVariation = kk
-        // })
-    }
-    const decreament = (index) => {
-        //   setproductVariation(()=>{
-        //     return parseInt(product[index].productVariation) -1
-        //   })
     }
     const removeItem = ({ productImage }) => {
         console.log(userId);
@@ -118,10 +105,8 @@ function Cart({thisuser}) {
                                                 <button className='textColor border-0 py-2 px-4 rounded-3' onClick={() => removeItem({ productImage: eachProduct.productImage })}> {isComing ? <div className="spinner-border text-danger opacity-50" role="status">
                                         <span className="visually-hidden">Loading...</span>
                                     </div> : <span ><FaTrash /> Remove</span>}</button>
-                                                <div className='row'>
-                                                    {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => decreament(index)}>-</button> */}
+                                                <div className='row'>          
                                                     <p className='col-12'>{eachProduct.productVariation} product</p>
-                                                    {/* <button className='col-4 btn btnbg text-light fw-bold' onClick={() => increament(index)}>+</button> */}
                                                 </div>
                                             </div>
                                             <hr />
@@ -137,7 +122,7 @@ function Cart({thisuser}) {
                                 <p>Sub-Total</p>
                                 <h5>₦ {checkOutAmount}</h5>CHECKOUT ({checkOutAmount})
                             </div>
-                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>{isGoing ? <div className="spinner-border opacity-50" role="status">
+                            <button className='btn mt-2 btnbg text-light fw-bold mx-2' onClick={() => payCheckOutAmount(checkOutAmount)}>{isGoing ? <div className="spinner-border text-white opacity-50" role="status">
                                 <span className="visually-hidden">Loading...</span>
                             </div> : `CHECKOUT (${checkOutAmount})`}</button>
                         </div>

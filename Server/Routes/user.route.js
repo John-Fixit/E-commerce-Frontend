@@ -15,4 +15,5 @@ userRouter.get('/products', userController.product)
 userRouter.post('/payment', userController.payment)
 userRouter.post('/sendEmail', userController.sendEmail)
 userRouter.post('/deleteAccount', userController.deleteAccount)
+userRouter.post('/contact', userController.contactMessage)
 module.exports = userRouter

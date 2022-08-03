@@ -3,7 +3,7 @@ import style from './style.css'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import axios from 'axios'
-function Adminsignup() {
+function Adminsignup({username}) {
   const passRegex = /^[\w]{6,}$/
   const contactRegex = /^[0][\d]{10}$/
   const signupURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/signup'
@@ -17,10 +17,11 @@ function Adminsignup() {
       lastname: '',
       contact: '',
       email: '',
-      gender: '',
+      gender: 'please select',
       profilePhoto: '',
       username: '',
-      password: 'please select',
+      password: '',
+      addedBy: username,
       privateKey: ''
     },
     onSubmit: (values) => {
@@ -31,6 +32,13 @@ function Adminsignup() {
         setmessage(res.data.message)
         if(res.data.status){
           setstatus(true)
+          formik.values.firstname = ''
+          formik.values.lastname = ''
+          formik.values.contact = ''
+          formik.values.email = ''
+          formik.values.gender = ''
+          formik.values.username = ''
+          formik.values.password = ''
         }
       })
     },
@@ -64,7 +72,7 @@ function Adminsignup() {
                 </div>
                 <div className='firstname'>
                   <div className='form-floating mt-2'>
-                    <input type='text' className='form-control' name='firstname' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='firstname' />
+                    <input type='text' className='form-control' name='firstname' onChange={formik.handleChange} onBlur={formik.handleBlur}  value={formik.values.firstname} placeholder='firstname' />
                     <label htmlFor=''>Firstname</label>
                   </div>
                   {
@@ -73,7 +81,7 @@ function Adminsignup() {
                 </div>
                 <div className='lastname'>
                   <div className='form-floating mt-2'>
-                    <input type='text' className='form-control' name='lastname' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='lastname' />
+                    <input type='text' className='form-control' name='lastname' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.lastname} placeholder='lastname' />
                     <label htmlFor=''>Lastname</label>
                   </div>
                   {
@@ -82,7 +90,7 @@ function Adminsignup() {
                 </div>
                 <div className='contact'>
                   <div className='form-floating mt-2'>
-                    <input type='text' className='form-control' name='contact' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Contact' />
+                    <input type='text' className='form-control' name='contact' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.contact} placeholder='Contact' />
                     <label htmlFor=''>Phone Contact</label>
                   </div>
                   {
@@ -91,7 +99,7 @@ function Adminsignup() {
                 </div>
                 <div className='email'>
                   <div className='form-floating mt-2'>
-                    <input type='text' className='form-control' name='email' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='Email address' />
+                    <input type='text' className='form-control' name='email' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.email} placeholder='Email address' />
                     <label htmlFor=''>Email Address</label>
                   </div>
                   {
@@ -108,7 +116,7 @@ function Adminsignup() {
                 </div>
                 <div className='username'>
                   <div className='form-floating mt-2'>
-                    <input type='text' className='form-control' name='username' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='username' />
+                    <input type='text' className='form-control' name='username' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.username} placeholder='username' />
                     <label htmlFor=''>username</label>
                   </div>
                   {
@@ -117,7 +125,7 @@ function Adminsignup() {
                 </div>
                 <div className='password'>
                   <div className='form-floating mt-2'>
-                    <input type='password' className='form-control' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='password' value={formik.password}/>
+                    <input type='password' className='form-control' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder='password' value={formik.values.password}/>
                     <label htmlFor=''>Password</label>
                   </div>
                   {

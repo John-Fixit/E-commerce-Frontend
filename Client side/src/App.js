@@ -6,6 +6,7 @@ import Homepage from './Components/Homepage'
 import AdminPage from './Components/AdminPage'
 import AdminSignin from './Components/AdminSignin'
 import LandingPage from './Components/LandingPage'
+import Contact from './Components/Contact'
 function App() {
 
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/admin_login' element={<AdminSignin />}/>
         <Route path='/signin' element={<Signin />} />
+        <Route path='/contact' element={<Contact />} />
         <Route path='/admin/*' element={<AdminPage />} />
         <Route path='/*' element={<LandingPage />} />
       </Routes>

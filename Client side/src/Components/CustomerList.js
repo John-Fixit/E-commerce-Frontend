@@ -3,11 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { FaTrashAlt } from 'react-icons/fa';
 import style from './style.css'
 function CustomerList({ customers, staff, adminDetail }) {
-  const [allCustomer, setallCustomer] = useState('')
-  const [allStaff, setallStaff] = useState('')
-  const [isLoading, setisLoading] = useState(true)
-  const [isGoing, setisGoing] = useState(false)
-  const [isComing, setisComing] = useState(false)
   const deleteCustomerURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteCustomer'
   const deleteStaffURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteStaff'
 
@@ -24,7 +19,7 @@ function CustomerList({ customers, staff, adminDetail }) {
   }
   const staffDlt = ({ staffId }) => {
     if (adminDetail._id == staffId) {
-      alert(`Please go to your profile and follow the instruction to delete your account!`)
+      alert(`Please go to your profile page and follow the precautions to delete your account!`)
     }
     else {
       if (window.confirm(`Are you sure to delete this staff! because the staff data will be deleted permsnently from the database?`)) {
@@ -43,7 +38,7 @@ function CustomerList({ customers, staff, adminDetail }) {
 
       <p className='card-header fs-4 text-center text-muted'>Registered Staff List</p>
       {
-        staff.length < 1 ? <p >No staff Registered</p> :
+        staff.length < 1 ? <p >No staff yet</p> :
           <table className="table table-hover">
             <thead className='text-center text-muted'>
               <th>S/N</th>
@@ -52,6 +47,7 @@ function CustomerList({ customers, staff, adminDetail }) {
               <th>Email</th>
               <th>Contact</th>
               <th>Username</th>
+              <th>Added By</th>
               <th>Delete</th>
             </thead>
             <tbody>
@@ -64,6 +60,7 @@ function CustomerList({ customers, staff, adminDetail }) {
                     <td>{eachOne.email}</td>
                     <td>{eachOne.contact}</td>
                     <td>{eachOne.username}</td>
+                    <td>{eachOne.addedBy? eachOne.addedBy : 'Not Registered'}</td>
                     <td><button className='btn btnbg text-white' onClick={() => staffDlt({ staffId: eachOne._id })}><FaTrashAlt /></button></td>
                   </tr>
                 ))
@@ -75,7 +72,7 @@ function CustomerList({ customers, staff, adminDetail }) {
 
       <p className='card-header fs-4 text-center text-muted mt-5'>Registered Customers List</p>
       {
-        customers.length < 1 ? <p >No Customer Registered</p> :
+        customers.length < 1 ? <p >No Customer yet</p> :
           <table className="table table-hover">
             <thead className='text-center text-muted'>
               <th>S/N</th>

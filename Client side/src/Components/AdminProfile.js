@@ -1,8 +1,8 @@
 import axios, { Axios } from 'axios'
-import { Modal } from 'bootstrap'
 import React, { useState, useEffect } from 'react'
-import { FaCartArrowDown, FaRegBookmark, FaRegHeart, FaRegUser, FaRegUserCircle, FaUserFriends, FaUserPlus } from 'react-icons/fa'
+import { FaCartArrowDown, FaRegBookmark, FaRegUser, FaUserFriends } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
+import user from '../Images/user.PNG'
 import style from './style.css'
 function AdminProfile({ adminDetail }) {
     const profileURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/save'
@@ -16,13 +16,11 @@ function AdminProfile({ adminDetail }) {
     const [gender, setgender] = useState('')
     const [disable, setdisable] = useState(true)
     const [dispp, setdispp] = useState(true)
-    const [profilePhoto, setprofilePhoto] = useState('')
     const [adminId, setadminId] = useState('')
     const [convertedFile, setconvertedFile] = useState('')
     const [message, setmessage] = useState('')
     const [status, setstatus] = useState(false)
     const [isLoading, setisLoading] = useState(true)
-    const [admin, setadmin] = useState('')
     const [isGoing, setisGoing] = useState(false)
     const [isSaving, setisSaving] = useState(false)
     const [isSavingPicture, setisSavingPicture] = useState(false)
@@ -50,6 +48,7 @@ function AdminProfile({ adminDetail }) {
         const reader = new FileReader()
         reader.readAsDataURL(selectedPhoto)
         reader.onload = () => {
+            setdispp(false)
             setconvertedFile(reader.result)
         }
     }
@@ -110,11 +109,11 @@ function AdminProfile({ adminDetail }) {
                     <div className='row mt-4'>
                         <div className='col-lg-3 shadow-sm'>
                             <div className='card h-100 p-2'>
-                                <Link to='' className='text-decoration-none text-dark'><FaRegUser size='4vh' /> My account</Link>
+                                <Link to='' className='text-decoration-none text-dark list'><FaRegUser size='4vh' /> My account</Link>
                                 <hr />
-                                <Link to='/admin/customers' className='text-decoration-none text-dark'><FaUserFriends size='4vh' /> Customer List</Link>
-                                <Link to='/admin/addProduct' className='text-decoration-none text-dark mt-3'><FaCartArrowDown size='4vh' /> Add New Product</Link>
-                                <Link to='/admin/signup' className='text-decoration-none text-dark mt-3'><FaRegBookmark size='4vh' /> Add New Staff</Link>
+                                <Link to='/admin/customers' className='text-decoration-none text-dark list'><FaUserFriends size='4vh' /> Customer & Staff List</Link>
+                                <Link to='/admin/addProduct' className='text-decoration-none text-dark list mt-3'><FaCartArrowDown size='4vh' /> Add New Product</Link>
+                                <Link to='/admin/signup' className='text-decoration-none text-dark list mt-3'><FaRegBookmark size='4vh' /> Add New Staff</Link>
                                 <button className='rounded col-9 mt-3 btn-outline-danger' data-bs-toggle="modal" data-bs-target="#exampleModal" data-backdrop="false">Delete account</button>
 
                                 <div className="modal fade" id="exampleModal" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -132,7 +131,7 @@ function AdminProfile({ adminDetail }) {
                                             <div className="modal-footer">
                                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeModal}>Close</button>
                                                 <button type="button" className="btn btnbg text-light" data-bs-dismiss="modal" disabled={disBtn} onClick={deleteAccount}>{isGoing ? <div className="spinner-border text-light opacity-50" role="status">
-                                                    <span className="visually-hidden">Proceed and Delete</span>
+                                                    <span className="visually-hidden">Loading...</span>
                                                 </div> : 'Proceed and Delete'}</button>
                                             </div>
                                         </div>
@@ -140,10 +139,11 @@ function AdminProfile({ adminDetail }) {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-lg-9 shadow-sm py-5'>
+                        <div className='col-lg-9 shadow-sm py-3'>
+                        <img src={ adminDetail.profilePhoto == '' ? user : adminDetail.profilePhoto} className='card-img-top rounded-circle' style={{ width: '12vh', height: '12vh' }} /><span className='text-light'>Hi, {firstname}</span>
                             <div className='row col-sm-12'>
                                 <div className='col-sm-8'>
-                                    <label htmlFor='' >Upload profile photo(optional)</label>
+                                    <label htmlFor='' >profile photo</label>
                                     {isLoading ? '' :
                                         status ? '' : <p className={!disable ? 'alert alert-danger p-0 text-center d-none' : 'alert alert-danger p-0 text-center'}>{message}</p>
                                     }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import AdminHome from './AdminHome'
 import AdminNav from './AdminNav'
-import AdminSignin from './AdminSignin'
 import Adminsignup from './Adminsignup'
 import CustomerList from './CustomerList'
 import Footage from './Footage'
@@ -19,6 +18,7 @@ function AdminPage() {
   const [staff, setstaff] = useState([])
   const [products, setproducts] = useState('')
   const [firstname, setfirstname] = useState('')
+  const [username, setusername] = useState('')
   const [profilePhoto, setprofilePhoto] = useState('')
   const [adminDetail, setadminDetail] = useState('')
   useEffect(() => {
@@ -39,6 +39,7 @@ function AdminPage() {
         const adminInfo = { adminId: responseFromServer._id, email: responseFromServer.email, firstname: responseFromServer.firstname, lastname: responseFromServer.lastname }
         localStorage.setItem('adminInfo', JSON.stringify(adminInfo))
         setfirstname(()=>{return responseFromServer.firstname})
+        setusername(()=>{return responseFromServer.username})
         setprofilePhoto(()=>{return responseFromServer.profilePhoto})
         axios.get(customerURI).then((res) => {
           if(res.data.status){
@@ -67,7 +68,7 @@ function AdminPage() {
             <Route path='/' element={<AdminHome customers={customers} staff={staff} products={products}/>}/>
             <Route path='/customers' element={<CustomerList customers={customers} staff={staff} adminDetail={adminDetail}/>}/>
             <Route path='/addProduct' element={<UploadProducts adminDetail={adminDetail}/>} />
-            <Route path='/signup' element={<Adminsignup />}/>
+            <Route path='/signup' element={<Adminsignup username={username}/>}/>
             <Route path='/profile' element={<AdminProfile adminDetail={adminDetail}/>} />
         </Routes>
         <Footage />

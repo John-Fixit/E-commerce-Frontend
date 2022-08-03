@@ -1,13 +1,12 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import style from './style.css'
-import { useNavigate } from 'react-router-dom'
 import img1 from '../Images/business.png'
 import img2 from '../Images/printing.png'
 import img4 from '../Images/sticker.png'
 import img5 from '../Images/christmas.png'
 import img7 from '../Images/1473159158_Christmas-card-for-this-wonderful-season.png'
-import { FaCartPlus, FaProductHunt, FaTrash, FaTrashAlt, FaUserAlt, FaUserAstronaut } from 'react-icons/fa'
+import { FaCartPlus, FaTrashAlt, FaUserAlt, FaUserAstronaut } from 'react-icons/fa'
 function AdminHome({ customers, staff, products }) {
   const deleteProductURI = 'https://jfix-e-commerce-site.herokuapp.com/admin/deleteProduct'
   const [message, setmessage] = useState('')
@@ -104,7 +103,7 @@ function AdminHome({ customers, staff, products }) {
             </div>
             <div className='col-md-4 col-sm-12 mt-3'>
               <div className='card shadow h-100 p-3'>
-                <FaUserAlt size='4vh' className='mx-auto' />
+                <FaUserAlt size='4vh' className='mx-auto textColor' />
                 <h3 className='card-title'>Customers : <span className='small_tex'>{customers.length}</span></h3>
                 <div className="progress mt-3">
                   <div className="progress-bar progress-bar-striped progress-bar-animated ps-1 pe-3" role="progressbar" style={{ width: `${customers.length}%`, backgroundColor: '#FF5722' }} >{customers.length}%</div>
@@ -133,15 +132,15 @@ function AdminHome({ customers, staff, products }) {
                 {
                   products.map((eachProduct, index) => (
                     <div className='col-lg-3 col-md-6 col-sm-12 mt-3' key={index}>
-                      <div className='card shadow p-2 h-100'>
-                        <img src={eachProduct.image} className='card-img-top mx-auto' />
+                      <div className='card shadow-lg p-2 h-100'>
+                        <img src={eachProduct.image} className='card-img-top mx-auto shadow w-75' />
                         <div className='card-body'>
                           <h6 className='card-title text-start'>{eachProduct.title}</h6>
                           <p className='rate'>RATE: {eachProduct.rating}</p>
                           <p className="card-text text-start">Price : ₦{eachProduct.price} <span >per product</span></p>
                         </div>
                         <div className="card-footer">
-                          <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({ productId: eachProduct._id, productTitle: eachProduct.title })} ><FaTrashAlt size='3vh' className='float-star' /><small> Delete</small></button>
+                          <button type="button" className="btn btnbg text-light w-100" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => modalOut({ productId: eachProduct._id, productTitle: eachProduct.title })} ><FaTrashAlt size='3vh' /><small> Delete</small></button>
                         </div>
                       </div>
                     </div>
