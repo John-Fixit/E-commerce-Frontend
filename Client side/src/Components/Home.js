@@ -46,7 +46,7 @@ function Home({ allProducts, thisuser }) {
         window.location.reload()
       }
     })
-  }
+  } 
   const increament = () => {
     setproductVariation(() => {
       return parseInt(productVariation) + 1
@@ -84,8 +84,8 @@ function Home({ allProducts, thisuser }) {
         </div>
         <div className='container-fluid products_row'>
           <div className='d-flex justify-content-between'>
-            <h4 className='text-capitalize'>Popular product</h4>
-            <h5 className='text-muted'>See all product</h5>
+            <h4 className='text-capitalize'>products</h4>
+            <h5 className='text-muted'>Favourites products</h5>
           </div>
         </div>
         <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
@@ -143,7 +143,7 @@ function Home({ allProducts, thisuser }) {
         </div>
         <div className='container-fluid text-center'>
           
-                <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, we're glad you stopped by!</span></marquee>
+                <marquee behavior="infinite" direction="alternate" className='mt-2'><span className='btnbg text-light rounded-pill px-3'>Welcome to JFIX e-commerce site, we're glad you stopped by!</span></marquee>
 
                 <div className='row'>
                   {
@@ -202,7 +202,7 @@ function Home({ allProducts, thisuser }) {
                   </div>
                 </div>
         </div>
-        <marquee behavior="infinite" direction="alternate" className=''><span className='btnbg text-light rounded-pill px-3'>Enjoy us product with no doubt!</span></marquee>
+        <marquee behavior="infinite" direction="alternate" className='mt-2'><span className='btnbg text-light rounded-pill px-3'>Enjoy our product with no doubt!</span></marquee>
       </div>
     </>
   )

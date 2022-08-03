@@ -4,6 +4,7 @@ import style from './style.css'
 import axios from 'axios';
 import { FaCartPlus } from 'react-icons/fa';
 import Footage from './Footage';
+import LandingNav from './LandingNav';
 function LandingPage() {
     const navigate = useNavigate()
     const productURI = 'https://jfix-e-commerce-site.herokuapp.com/user/products'
@@ -26,34 +27,7 @@ function LandingPage() {
     }
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light fixed-top padding_nav bgs">
-                <div className="container-fluid">
-                    <Link to='/' className="navbar-brand fs-2 fw-bold text-light">JFIX</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-5" style={{ marginLeft: '6vh' }}>
-                            <li className="nav-item ms-5">
-                                <Link to='/' className="nav-link active text-light ">Home</Link>
-                            </li>
-                            <li className="nav-item ms-5">
-                                <Link to='/' className="nav-link active text-light">About us</Link>
-                            </li>
-                            <li className="nav-item ms-5">
-                                <Link to='/contact' className="nav-link active text-light">Contact</Link>
-                            </li>
-                            <li className="nav-item ms-5">
-                                <Link to='/' className="nav-link active text-light">Help</Link>
-                            </li>
-                        </ul>
-                        <form className='ms-4 d-flex'>
-                            <Link to='/signin' className=' text-decoration-none'><button className='btn btn-light textColor fw-bold' > Log In </button></Link>
-                            <Link to='/signup' className=' text-decoration-none'><button className='btn btn-outline-light ms-3 fw-bold'>Create account</button></Link>
-                        </form>
-                    </div>
-                </div>
-            </nav>
+            {/* <LandingNav /> */}
             <div className='container-fluid cont_fluid'>
                 <h3 className='card-header rounded border-0 btnbg mb-2 text-light'> <marquee behavior="infinite" direction="alternate" className='btnbg text-light macque'>Welcome to JFIX e-commerce site.</marquee></h3>
                 <div className='products_row'>
@@ -114,7 +88,7 @@ function LandingPage() {
                 </div>
                 <Link to='/signup' className='btn mt-3 btnbg text-white py-2 px-4' >Get Started </Link>
             </div>
-            <Footage />
+            {/* <Footage /> */}
         </>
     )
 }

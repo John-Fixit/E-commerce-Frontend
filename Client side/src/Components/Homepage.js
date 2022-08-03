@@ -6,6 +6,8 @@ import Footage from './Footage'
 import Profile from './Profile'
 import Cart from './Cart'
 import axios from 'axios'
+import Contact from './Contact'
+import About from './About'
 function Homepage() {
   const [thisuser, setthisuser] = useState('')
   const navigate = useNavigate()
@@ -51,6 +53,8 @@ function Homepage() {
         <Route path='/' element={<Home allProducts={allProducts} thisuser={thisuser}/>} />
         <Route path='/profile' element={<Profile thisuser={thisuser}/>}/>
         <Route path='/cart' element={<Cart thisuser={thisuser}/>}/>
+        <Route path='/contact' element={<Contact/>}/>
+        <Route path='/about' element={<About/>}/>
       </Routes>
       <Footage />
     </>

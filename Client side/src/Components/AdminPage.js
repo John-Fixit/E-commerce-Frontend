@@ -8,6 +8,7 @@ import Footage from './Footage'
 import UploadProducts from './UploadProducts'
 import axios from 'axios'
 import AdminProfile from './AdminProfile'
+import Contact from './Contact'
 
 function AdminPage() {
 
@@ -70,6 +71,7 @@ function AdminPage() {
             <Route path='/addProduct' element={<UploadProducts adminDetail={adminDetail}/>} />
             <Route path='/signup' element={<Adminsignup username={username}/>}/>
             <Route path='/profile' element={<AdminProfile adminDetail={adminDetail}/>} />
+            <Route path='/about' element={<AdminProfile adminDetail={adminDetail}/>} />
         </Routes>
         <Footage />
     </>

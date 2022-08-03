@@ -255,7 +255,7 @@ const payment = (req, res) => {
                                 res.send({message: `Network error`, status: false})
                             }
                             else{
-                                res.send({message:` transaction successfull`, status: true})
+                                res.send({message:`transaction successfull`, status: true})
                             }
                         })
                     }
@@ -320,12 +320,10 @@ const contactMessage =(req, res)=>{
             subject: `${req.body.senderName} send message to Ecomfix website- titled: ${req.body.senderTitle}`,
             text: `${req.body.senderMessage}`
         }
-        transporter.sendMail(mailToSend, (err, res)=>{
+        transporter.sendMail(mailToSend, (err, info)=>{
             if(err){
-                console.log(`Network error`);
-                res.send({message: `Connection error`, status: false})
+                res.send({message: `Network error please check your connection, your message will be send automatically`, status: false})
             }else{
-                console.log(res.response);
                 res.send({message: `Message sent successfully`, status: true})
             }
         })

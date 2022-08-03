@@ -48,13 +48,13 @@ function Navbar({thisuser}) {
                                 <Link to='/homepage/' className="nav-link active text-light ">Home</Link>
                             </li>
                             <li className="nav-item ms-3">
-                                <Link to='/homepage/' className="nav-link active text-light">About us</Link>
+                                <Link to='/homepage/about' className="nav-link active text-light">About us</Link>
                             </li>
                             <li className="nav-item ms-3">
                                 <Link to='/homepage/' className="nav-link active text-light">Products</Link>
                             </li>
                             <li className="nav-item ms-3">
-                                <Link to='/homepage/' className="nav-link active text-light">Help</Link>
+                                <Link to='/homepage/contact' className="nav-link active text-light">Contact Us</Link>
                             </li>
                             <li className="nav-item ms-3">
                                 <Link to='/homepage/cart' className="nav-link active text-light position-relative"><FaCartArrowDown /> Cart <span className='position-absolute rounded-circle bg-white text-dark text-center top-0' style={{ width: '2.5vh', height: '2.5vh' }}>{cartProduct}</span></Link>

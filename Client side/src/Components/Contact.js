@@ -5,18 +5,21 @@ import * as yup from 'yup'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from 'react-icons/fa'
+import LandingNav from './LandingNav'
+import Footage from './Footage'
 function Contact() {
     const contactURI = 'http://localhost:4000/user/contact'
     const [status, setstatus] = useState(false)
     const [message, setmessage] = useState('')
     const [isLoading, setisLoading] = useState(true)
     const [isGoing, setisGoing] = useState(false)
-    useEffect(()=>{
-       getIp()
+    useEffect(() => {
+        getIp()
     }, [])
-    const getIp= async()=>{
-            const res=await axios.get('https://geolocation-db.com/json')
-            console.log(res)
+    const getIp = () => {
+        axios.get('https://geolocation-db.com/json').then((res) => {
+            console.log(res);
+        })
     }
     const formik = useFormik({
         initialValues: {
@@ -27,13 +30,20 @@ function Contact() {
             senderMessage: ''
         },
         onSubmit: (values) => {
+            setisGoing(true)
             axios.post(contactURI, values).then((res) => {
+                setisLoading(false)
+                formik.values.senderName = ''
+                formik.values.senderEmail = ''
+                formik.values.senderAddress = ''
+                formik.values.senderTitle = ''
+                formik.values.senderMessage = ''
                 setisGoing(false)
                 setmessage(res.data.message)
                 setstatus(res.data.status)
                 console.log(res);
             })
-            
+
         },
         validationSchema: yup.object({
             senderName: yup.string().required('This field is Required'),
@@ -45,11 +55,11 @@ function Contact() {
     })
     return (
         <>
-            <div className='col-12'>
+            <div className='col-12 cont_fluid'>
                 <h2 className='btnbg text-center text-light py-2'>Contact Page</h2>
-                <div className='container mt-3'>
+                <div className='container mt-2'>
                     {
-                        isLoading ? '' : status ? <p className='alert alert-success'>{message}</p> : <p className='alert alert-danger'>{message}</p>
+                        isLoading ? '' : status ? <p className='alert alert-success text-center pt-3'>{message}</p> : <p className='alert alert-danger text-center pt-3'>{message}</p>
                     }
                     <form action='' onSubmit={formik.handleSubmit}>
                         <div className='row'>
@@ -93,13 +103,13 @@ function Contact() {
                             </div>
                             <div className='col-12 mt-3'>
                                 <textarea cols='10' rows='10' className='form-control' placeholder='Message' name='senderMessage' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.senderMessage}></textarea>
-                                <button className='btn btnbg mt-3 text-light p-3 float-end' type='submit'>{isGoing ? <div class="spinner-border" role="status">
-                                    <span class="visually-hidden">Loading...</span>
+                                <button className='btn btnbg mt-3 text-light p-2 float-end' type='submit'>{isGoing ? <div className="spinner-border text-white" role="status">
+                                    <span className="visually-hidden">Loading...</span>
                                 </div> : 'Send Message'
                                 }</button>
                             </div>
                         </div>
-                    <Link to='/contact' className='text-decoration-none border p-2 rounded-3 btnbg text-white'><FaArrowAltCircleLeft/> Back</Link>
+                        <Link to='/homepage' className='text-decoration-none border p-2 rounded-3 btnbg text-white'><FaArrowAltCircleLeft /> Back</Link>
                     </form>
                 </div>
             </div>
