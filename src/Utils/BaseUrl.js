@@ -1,0 +1,1 @@
+export const baseUrl = 'https://ecom-backend-d03esupoe-john-fixit.vercel.app'
