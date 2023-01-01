@@ -174,10 +174,6 @@ function LandingPage() {
           Get Started{" "}
         </Link>
       </div>
-      <AdSense.Google
-        client = "ca-pub-7640795686308536"
-        slot = "5347541763"
-      />
     </>
   );
 }
